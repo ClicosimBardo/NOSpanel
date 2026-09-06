@@ -259,7 +259,7 @@ def update_user_preferences():
     if 'language' in data:
         # Allow common language codes
         lang = data['language']
-        if lang == '' or lang in ['en', 'de', 'es', 'fr', 'it', 'pt', 'nl', 'pl', 'ru', 'zh', 'ja', 'ko']:
+        if lang == '' or lang in ['en', 'de', 'es', 'fr', 'it', 'pt', 'pt-BR', 'nl', 'pl', 'ru', 'zh', 'ja', 'ko']:
             user['language'] = lang
         else:
             return jsonify({'error': f'Invalid language: {lang}'}), 400
@@ -866,6 +866,7 @@ def create_user():
         'permissions': permissions,
         'denied_permissions': denied_permissions,
         'portal_only': data.get('portal_only', False) if role != ROLE_ADMIN else False,
+        'language': data.get('language') or 'pt-BR',  # NosPanel fork default language for new users
     }
 
     save_users(users_db)
