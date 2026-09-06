@@ -1,0 +1,9 @@
+{
+    "id": "cportal",
+    "name": "CPortal",
+    "version": "1.0.0-nos.1",
+    "author": "NosPanel Team",
+    "description": "Self-service portal for hosting customers (NosPanel fork of Client Portal). Clients see only their assigned VMs. Internationalized (pt-BR/en) with an extensible feature registry.",
+    "min_pegaprox": "0.9.4",
+    "has_frontend": false
+}

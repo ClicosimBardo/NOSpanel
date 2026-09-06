@@ -1,0 +1,7 @@
+{
+    "id": "sample",
+    "name": "Sample feature",
+    "description": "Exemplo do registro de extensoes do CPortal (C5). Habilitar adicionando 'sample' em features no config.json.",
+    "version": "1.0.0",
+    "default_enabled": false
+}
