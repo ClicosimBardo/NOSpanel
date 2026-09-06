@@ -3,13 +3,13 @@
         // LanguageContext + AuthContext providers
         // ═══════════════════════════════════════════════
         // Language Context
-        // LW: Default is German (de) since thats what we use internally
+        // NosPanel fork default: pt-BR (upstream default was de)
         const LanguageContext = createContext();
 
         // NS May 2026 (#389): supported language allowlist — reused for input validation
         // both at init (localStorage) and at switch time. Keep in sync with the
         // backend allowlist in pegaprox/api/users.py and the LanguageSwitcher list.
-        const SUPPORTED_LANGS = ['de', 'en', 'it', 'fr', 'es', 'pt', 'ko', 'zh', 'pl'];
+        const SUPPORTED_LANGS = ['de', 'en', 'it', 'fr', 'es', 'pt', 'pt-BR', 'ko', 'zh', 'pl'];
 
         // map navigator.language ("en-US", "de-AT", ...) onto a supported code, or null
         function _detectBrowserLang() {
@@ -30,6 +30,7 @@
                         parts.includes('hk') ||
                         parts.includes('mo')
                     )) continue;
+                    if (base === 'pt' && parts.includes('br')) return 'pt-BR';
                     if (SUPPORTED_LANGS.includes(base)) return base;
                 }
             } catch (_) { /* navigator unavailable / locked down */ }
@@ -48,7 +49,7 @@
                 } catch (_) {}
                 const detected = _detectBrowserLang();
                 if (detected) return detected;
-                return 'de';
+                return 'pt-BR';
             });
 
             // Translation function with English fallback
@@ -110,7 +111,8 @@
                 { code: 'it', flag: '🇮🇹', label: 'IT', title: 'Italiano' },
                 { code: 'fr', flag: '🇫🇷', label: 'FR', title: 'Français' },
                 { code: 'es', flag: '🇪🇸', label: 'ES', title: 'Español (LATAM)' },
-                { code: 'pt', flag: '🇧🇷', label: 'PT', title: 'Português' },
+                { code: 'pt', flag: '🇵🇹', label: 'PT', title: 'Português (Portugal)' },
+                { code: 'pt-BR', flag: '🇧🇷', label: 'BR', title: 'Português (Brasil)' },
                 { code: 'ko', flag: '🇰🇷', label: 'KO', title: '한국어' },
                 { code: 'zh', flag: '🇨🇳', label: 'ZH', title: t('languageSimplifiedChinese') },
                 { code: 'pl', flag: '🇵🇱', label: 'PL', title: 'Polski' },

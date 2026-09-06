@@ -38547,3 +38547,15 @@
             // French translations by @IMNotMax (PR #186)
             // Falls back to EN for missing keys
         };
+
+// ============================================================
+// NosPanel fork - pt-BR (Portugues do Brasil)
+// pt-BR is an alias of upstream `pt` plus BR overrides, so upstream
+// merges stay trivial: new/updated `pt` keys are inherited automatically
+// and only the BR wording below diverges.
+// ============================================================
+translations['pt-BR'] = {
+    ...translations['pt'],
+    powerRatesHint: 'Padrão: 80W idle / 300W máx por nó, 0,3 W/GB RAM, PUE 1,5, R$ 0,30/kWh, 0,4 kg CO₂/kWh. Ajuste ao seu hardware e fornecedor.',
+    costRatesHint: 'Tarifas por cluster. Deixe no padrão para usar o fallback global. Valores na moeda desejada (BRL).',
+};
