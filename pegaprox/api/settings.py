@@ -3440,6 +3440,19 @@ def client_portal_page(subpath=None):
     return '<h1>Client Portal not installed</h1>', 404
 
 
+@bp.route('/cportal')
+@bp.route('/cportal/<path:subpath>')
+def cportal_page(subpath=None):
+    """Serve CPortal (NosPanel fork) - only if plugin is enabled"""
+    from pegaprox.api.plugins import _loaded_plugins
+    if 'cportal' not in _loaded_plugins:
+        return '<h1>CPortal not available</h1><p>The CPortal plugin is not enabled.</p>', 404
+    import os
+    portal_path = os.path.join(os.path.dirname(__file__), '..', '..', 'plugins', 'cportal', 'portal.html')
+    if os.path.exists(portal_path):
+        return send_file(portal_path)
+    return '<h1>CPortal not installed</h1>', 404
+
 @bp.route('/oidc/callback')
 def oidc_callback_page():
     """NS: Feb 2026 - Serve SPA for OIDC redirect callback
