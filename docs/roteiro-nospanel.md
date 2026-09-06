@@ -1,7 +1,7 @@
 # NosPanel — Roteiro de Análise, Tropicalização e Plugin CPortal
 
 > Documento de discussão e aprovação. Nenhuma alteração de código foi aplicada.
-> Fases 0–4 executadas em 2026-09-06; Fases 5–6 pendentes (Fase 5/CPortal aguarda aprovação do catálogo).
+> Fases 0–5 executadas em 2026-09-06; Fase 6 (rebranding) pendente.
 
 ## Contexto e objetivo
 
@@ -37,7 +37,7 @@ PegaProx é a base do fork NosPanel. O fork deve:
 - **Fase 2 — Documentação-base** (concluída): este roteiro, `docs/mapping/politica-fork.md`, `docs/mapping/mapa-modulos.md`, `docs/mapping/inventario-client-portal.md` e `docs/mapping/mapa-tropicalizacao.md`.
 - **Fase 3 — Catálogo de alterações** (concluída): `docs/alteracoes/catalogo-alteracoes.md` define as mudanças candidatas, granularidade de commits e regras de aplicação — **aguarda aprovação**.
 - **Fase 4 — Tropicalização v1** (concluída em 2026-09-06): itens `T1` implementados em commits atômicos `cd4c255`, `df3f07b`, `c72ab9a` e `759dd20` (defaults BRL/pt-BR, suporte pt-BR e formatação locale nos dashboards de custo/energia).
-- **Fase 5 — Plugin CPortal** (aguardando aprovação do catálogo): executar itens `C1`–`C6` quando aprovados.
+- **Fase 5 — Plugin CPortal** (concluída em 2026-09-06): itens `C1`–`C6` implementados nos commits `3ff18d8`, `4ccc36e` e `dec1a94` (rota `/cportal`, plugin `cportal` com i18n pt-BR/en + registry de features + feature `sample`, contrato de mensagens e testes smoke).
 - **Fase 6 — Rebranding opcional** (mapeada): inventário de impacto de marca (título, chaves de tradução, manifestos, README, licenciamento) para decisão futura.
 
 ## Entregáveis por diretório

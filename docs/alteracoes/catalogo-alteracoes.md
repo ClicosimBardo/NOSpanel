@@ -1,8 +1,8 @@
-﻿# Catálogo priorizado de alterações NosPanel (Fase 3)
+# Catálogo priorizado de alterações NosPanel (Fase 3)
 
 > Produto da Fase 3: define o que será alterado, em que granularidade e como aplicar.
 > Status em 2026-09-06: itens **T1 implementados** (Fase 4 concluída, commits cd4c255 a 759dd20);
-> itens C1–C6 (CPortal) e R1 (rebranding) **aguardando aprovação**.
+> itens **C1–C6 (CPortal) implementados** (Fase 5 concluída, commits 3ff18d8/4ccc36e/dec1a94); **R1 (rebranding) aguardando aprovação**.
 
 ## Regras de aplicação (todas as fases)
 
@@ -21,7 +21,7 @@
 | T1.4 | Revisão de termos das chaves `pt` | Implementado via **overrides pt-BR** (bloco `translations['pt-BR']` no fim de `web/src/translations.js`), sem editar as chaves `pt` upstream — menor atrito de merge. |
 | T1.5 | Modelo de idioma | Decidido e implementado: **pt-BR** como código próprio (alias de `pt` + overrides), allowlist backend/frontend ampliada, seletor com "Português (Portugal)" e "Português (Brasil)", default do fork pt-BR. |
 
-## C — Plugin CPortal (Fase 5 — aguardando aprovação)
+## C — Plugin CPortal (Fase 5 — CONCLUÍDA em 2026-09-06)
 
 | ID | Mudança | Escopo/impacto | Prioridade |
 |---|---|---|---|
@@ -31,6 +31,8 @@
 | C4 | Formatação BRL/pt-BR no portal (moeda, números, datas) reusando a camada T1 quando possível | portal.html | P0 |
 | C5 | Arquitetura extensível v1: registro de features (feature = manifest próprio + hooks JS/API + i18n por feature), rota única `/portal` | Design + plugin | P0 |
 | C6 | Testes do plugin (backend das rotas + smoke do portal) — hoje inexistentes no upstream | `tests/` | P1 |
+
+> Status: C1 base do plugin (rota `/cportal` no core, `manifest.json`/`config.json`/`__init__.py`/`portal.html`), C2 contrato de mensagens (`_CPORTAL_MSGS`/`_tr`), C3 i18n do portal com `tr()`/dicionário e resolução de idioma, C4 formatação pt-BR (decimais/tamanhos) e `default_language: pt-BR`, C5 registry de features (`plugins/cportal/features/*` + `ui.js` servido + loader no portal + feature `sample`), C6 testes smoke (`tests/test_plugin_cportal.py`). A migração frase a frase dos textos do portal para `tr()` é **incremental** (fallback para o literal original).
 
 ## R — Rebranding opcional (Fase 6, mapeado)
 
