@@ -1,4 +1,4 @@
-﻿# Marca NosPanel — fonte e amostras extraídas
+# Marca NosPanel — fonte e amostras extraídas
 
 ## Fontes (vetoriais, fidelidade total)
 - `nospanel-marca.pdf` — folha de marca original (1 página, 100% vetorial).
@@ -34,3 +34,14 @@ execução do rebranding (item R1).
 - `apple-touch-icon` final deve ter fundo opaco (sem alpha) — montar na exportação.
 - `favicon.ico` multi-tamanho (16/24/32/48/64) — montar a partir de
   `nospanel-favicon-master.png` (ou do SVG).
+
+## Pacote gerado no Gemini (`gemini/`, 2026-09-06)
+
+Arquivos recebidos do fluxo de geração (Downloads → projeto). Dimensões validadas:
+
+- PNG: `nospanel-logo-dark.png` / `nospanel-logo-light.png` (2400x509, RGBA); `nospanel-icon-512-maskable.png` (512x512, RGB); `nospanel-icon-192.png` (192x192, RGBA); `nospanel-apple-touch-icon.png` (180x180, RGB — opaco, correto); `nospanel-favicon-master.png` (256x256, RGBA).
+- SVG (vetorial): `nospanel-logo-dark/light/red.svg` (4200x890), `nospanel-mark-dark/light.svg` (1660x890), `nospanel-favicon-master.svg` (256).
+
+Ainda não recebidos / pendentes de decisão: PNG do `logo-red`, `favicon.ico` (multi-tamanho), `nospanel-login-bg`, `nospanel-og`. A variante `logo-red` (Vermelho `#911418`) precisa de QA visual.
+
+> `nospanel-marca (1).pdf` no Downloads é idêntico ao `nospanel-marca.pdf` já versionado (hash SHA-256 igual) — não duplicado.
