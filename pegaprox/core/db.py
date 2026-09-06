@@ -1786,7 +1786,7 @@ class PegaProxDB:
                     pue REAL DEFAULT 1.5,
                     kwh_price REAL DEFAULT 0.30,
                     kg_co2_per_kwh REAL DEFAULT 0.4,
-                    currency TEXT DEFAULT 'EUR',
+                    currency TEXT DEFAULT 'BRL',
                     notes TEXT DEFAULT '',
                     updated_at TEXT,
                     updated_by TEXT DEFAULT ''
@@ -1807,7 +1807,7 @@ class PegaProxDB:
                     cpu_per_core_h REAL DEFAULT 0.012,
                     mem_per_gb_h REAL DEFAULT 0.0035,
                     storage_per_gb_month REAL DEFAULT 0.10,
-                    currency TEXT DEFAULT 'EUR',
+                    currency TEXT DEFAULT 'BRL',
                     notes TEXT DEFAULT '',
                     updated_at TEXT,
                     updated_by TEXT DEFAULT ''
