@@ -2880,3 +2880,24 @@ pre{white-space:pre-wrap;word-break:break-all;border:1px solid #ccc;padding:12px
             );
         }
         try { window.PegaProxVerifyScheduleModal = VerifyScheduleModal; } catch (_) {}
+
+// ============================================================
+// NosPanel fork - locale-aware number/currency formatting (pt-BR aware)
+// ============================================================
+const NOS_CURRENCY_SYMS = { EUR: '€', USD: '$', GBP: '£', CHF: 'CHF', JPY: '¥', BRL: 'R$' };
+function nosMoneySym(cur) { return NOS_CURRENCY_SYMS[cur] || cur || 'BRL'; }
+function nosIsBR(lang) { return lang === 'pt-BR'; }
+function fmtMoney(value, cur, lang) {
+    const n = Number(value) || 0;
+    const code = cur || 'BRL';
+    if (nosIsBR(lang)) {
+        return nosMoneySym(code) + ' ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    return nosMoneySym(code) + ' ' + n.toFixed(2);
+}
+function fmtNum(value, decimals, lang) {
+    const n = Number(value) || 0;
+    const d = (decimals == null) ? 2 : decimals;
+    if (nosIsBR(lang)) return n.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    return n.toFixed(d);
+}

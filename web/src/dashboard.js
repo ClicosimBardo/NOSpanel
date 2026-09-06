@@ -3847,6 +3847,7 @@
         // MK May 2026 — Power & Carbon Tracking. Same shape as Cost Dashboard
         // (rates editor + summary + per-VM table) but in kWh / kg CO₂.
         function PowerCarbonTab({ clusterId, clusterName, authFetch, addToast, t, isAdmin }) {
+            const { language } = useTranslation();
             const [summary, setSummary] = React.useState(null);
             const [rows, setRows] = React.useState([]);
             const [loading, setLoading] = React.useState(false);
@@ -3871,7 +3872,7 @@
 
             const openRates = async () => {
                 const r = await authFetch(`${API_URL}/power/rates/${clusterId}`).then(x => x?.json()).catch(() => null);
-                setRateForm(r || { node_idle_w: 80, node_max_w: 300, mem_w_per_gb: 0.3, pue: 1.5, kwh_price: 0.30, kg_co2_per_kwh: 0.40, currency: 'EUR', notes: '' });
+                setRateForm(r || { node_idle_w: 80, node_max_w: 300, mem_w_per_gb: 0.3, pue: 1.5, kwh_price: 0.30, kg_co2_per_kwh: 0.40, currency: 'BRL', notes: '' });
                 setShowRates(true);
             };
             const saveRates = async () => {
@@ -3887,7 +3888,7 @@
                             pue: parseFloat(rateForm.pue) || 1,
                             kwh_price: parseFloat(rateForm.kwh_price) || 0,
                             kg_co2_per_kwh: parseFloat(rateForm.kg_co2_per_kwh) || 0,
-                            currency: rateForm.currency || 'EUR',
+                            currency: rateForm.currency || 'BRL',
                             notes: rateForm.notes || '',
                         }),
                     });
@@ -3899,11 +3900,10 @@
                 } finally { setSavingRates(false); }
             };
 
-            const cur = summary?.rates?.currency || 'EUR';
-            const sym = ({ EUR: '€', USD: '$', GBP: '£' }[cur] || cur);
-            const fmtCost = (n) => `${sym} ${(n || 0).toFixed(2)}`;
-            const fmtKwh = (n) => `${(n || 0).toFixed(1)} kWh`;
-            const fmtCo2 = (n) => `${(n || 0).toFixed(1)} kg`;
+            const cur = summary?.rates?.currency || 'BRL';
+            const fmtCost = (n) => fmtMoney(n, cur, language);
+            const fmtKwh = (n) => `${fmtNum(n, 1, language)} kWh`;
+            const fmtCo2 = (n) => `${fmtNum(n, 1, language)} kg`;
 
             // ── Export helpers (same WinAnsi-safe pattern as Cost / Insights) ──
             const safe = (s) => {
@@ -4198,6 +4198,7 @@
                                             <option value="USD">USD ($)</option>
                                             <option value="GBP">GBP (£)</option>
                                             <option value="CHF">CHF</option>
+                                            <option value="BRL">BRL (R$)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -4223,6 +4224,7 @@
         }
 
         function CostDashboardTab({ clusterId, clusterName, authFetch, addToast, t, isAdmin }) {
+            const { language } = useTranslation();
             const [summary, setSummary] = React.useState(null);
             const [rows, setRows] = React.useState([]);
             const [loading, setLoading] = React.useState(false);
@@ -4253,7 +4255,7 @@
                     cpu_per_core_h: 0.012,
                     mem_per_gb_h: 0.0035,
                     storage_per_gb_month: 0.10,
-                    currency: 'EUR',
+                    currency: 'BRL',
                     notes: '',
                 });
                 setShowRates(true);
@@ -4269,7 +4271,7 @@
                             cpu_per_core_h: parseFloat(rateForm.cpu_per_core_h) || 0,
                             mem_per_gb_h: parseFloat(rateForm.mem_per_gb_h) || 0,
                             storage_per_gb_month: parseFloat(rateForm.storage_per_gb_month) || 0,
-                            currency: rateForm.currency || 'EUR',
+                            currency: rateForm.currency || 'BRL',
                             notes: rateForm.notes || '',
                         }),
                     });
@@ -4284,9 +4286,8 @@
             };
 
             const fmt = (n) => {
-                const cur = summary?.rates?.currency || 'EUR';
-                const sym = ({ EUR: '€', USD: '$', GBP: '£', CHF: 'CHF', JPY: '¥', BRL: 'R$' }[cur] || cur);
-                return `${sym} ${(n || 0).toFixed(2)}`;
+                const cur = summary?.rates?.currency || 'BRL';
+                return fmtMoney(n, cur, language);
             };
 
             const sorted = [...rows].sort((a, b) => {
@@ -4310,7 +4311,7 @@
                     addToast(t('costNoData') || 'No data', 'warning');
                     return;
                 }
-                const cur = summary?.rates?.currency || 'EUR';
+                const cur = summary?.rates?.currency || 'BRL';
                 const cols = [
                     'vmid', 'name', 'node', 'type',
                     'avg_cpu_pct', 'avg_mem_pct', 'running_ratio',
@@ -4354,7 +4355,7 @@
                     addToast(t('costNoData') || 'No data', 'warning');
                     return;
                 }
-                const cur = summary.rates.currency || 'EUR';
+                const cur = summary.rates.currency || 'BRL';
                 const sym = ({ EUR: 'EUR', USD: 'USD', GBP: 'GBP', CHF: 'CHF', JPY: 'JPY', BRL: 'BRL' }[cur] || cur);
                 const pf = (n) => `${sym} ${(n || 0).toFixed(2)}`;
 
