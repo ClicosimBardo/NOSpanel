@@ -2,7 +2,7 @@
 
 > Produto da Fase 3: define o que será alterado, em que granularidade e como aplicar.
 > Status em 2026-09-06: itens **T1 implementados** (Fase 4 concluída, commits cd4c255 a 759dd20);
-> itens **C1–C6 (CPortal) implementados** (Fase 5 concluída, commits 3ff18d8/4ccc36e/dec1a94); **R1 (rebranding) mapeado** — inventário em `docs/mapping/inventario-rebranding.md`, execução aguarda decisão.
+> itens **C1–C6 (CPortal) implementados** (Fase 5 concluída, commits 3ff18d8/4ccc36e/dec1a94); **R1 mapeado** (inventário em `docs/mapping/inventario-rebranding.md`) — assets aprovados no QA visual (Eduardo, 2026-09-06); execução do rebranding aguarda decisão de estratégia.
 
 ## Regras de aplicação (todas as fases)
 
