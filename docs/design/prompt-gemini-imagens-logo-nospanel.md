@@ -1,4 +1,4 @@
-﻿# Prompt Gemini — Pacote de imagens a partir do logo NosPanel
+# Prompt Gemini — Pacote de imagens a partir do logo NosPanel
 
 > Uso: anexe o logo oficial (PNG/SVG) no Gemini e cole o prompt abaixo.
 > Os nomes de entrega usam o prefixo `nospanel-*`; a tabela final mostra o mapeamento
@@ -6,10 +6,13 @@
 
 ## Antes de usar (preencher)
 
-- Cor primária da marca: `________` (ex.: laranja `#E57000` herdado)
-- Cor secundária / apoio: `________`
-- Fundo escuro do app: `#0c1117` (login/dashboard) — ajuste se necessário
+- Cor primária da marca: `#911418` (Vermelho NosPanel)
+- Cores de apoio: `#0E1317` (Grafite) e `#DADBD4` (Creme)
+- Fundo escuro do app: `#0c1117` (dashboard atual) — Grafite da marca `#0E1317` (ajuste se adotado)
 - Fundo claro: `#f6f8fa` (tema claro) e branco `#ffffff`
+
+## Fonte da marca\n\n- Folha oficial: `branding/nospanel-marca.pdf`; vetorial: `branding/nospanel-marca.svg`;
+  amostras PNG em `branding/extracted/`. Anexe o logo (SVG/PNG) ao Gemini.
 
 ## Prompt principal (copiar e colar)
 
