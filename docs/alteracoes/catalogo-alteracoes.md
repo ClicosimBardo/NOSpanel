@@ -2,7 +2,7 @@
 
 > Produto da Fase 3: define o que será alterado, em que granularidade e como aplicar.
 > Status em 2026-09-06: itens **T1 implementados** (Fase 4 concluída, commits cd4c255 a 759dd20);
-> itens **C1–C6 (CPortal) implementados** (Fase 5 concluída, commits 3ff18d8/4ccc36e/dec1a94); **R1 mapeado** (inventário em `docs/mapping/inventario-rebranding.md`) — assets aprovados no QA visual (Eduardo, 2026-09-06); execução do rebranding aguarda decisão de estratégia.
+> itens **C1–C6 (CPortal) implementados** (Fase 5 concluída, commits 3ff18d8/4ccc36e/dec1a94); **R1 em execução** (rebranding autorizado) — camadas 1–3 concluídas (`8979bd2`, `8fa2ad4`, `2806ebd`) e sponsors adicionados (`b0a5a32`); inventário em `docs/mapping/inventario-rebranding.md`; QA visual aprovado (Eduardo, 2026-09-06).
 
 ## Regras de aplicação (todas as fases)
 
@@ -38,7 +38,7 @@
 
 | ID | Mudança | Escopo/impacto |
 |---|---|---|
-| R1 | Inventário de marca (título/subtítulo do app, chaves de tradução de brand, manifestos, README, `NOTICE`/licenciamento, changelog) | Inventário entregue em `docs/mapping/inventario-rebranding.md`; **execução autorizada (2026-09-06)** — camada 1 concluída (assets/ícones/favicons/títulos: commit `8979bd2`); pendentes: empacotamento (debian/systemd) e revisão final do README; strings visíveis cobertas via t(); backend textual concluído (commit `2806ebd`) |
+| R1 | Inventário de marca (título/subtítulo do app, chaves de tradução de brand, manifestos, README, `NOTICE`/licenciamento, changelog) | Inventário entregue em `docs/mapping/inventario-rebranding.md`; **execução autorizada (2026-09-06)** — camadas 1–3 concluídas (`8979bd2`, `8fa2ad4`, `2806ebd`); pendentes: empacotamento (debian/systemd) e revisão final do README; strings visíveis cobertas via t(); backend textual concluído (commit `2806ebd`) |
 
 ## Pontos de decisão pendentes (discussão)
 
