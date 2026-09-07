@@ -65,7 +65,7 @@
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(16);
             doc.setTextColor(233, 236, 239); // #e9ecef
-            doc.text(title || 'PegaProx Report', margin + 24, 12);
+            doc.text(title || APP_NAME + ' Report', margin + 24, 12);
             doc.setFontSize(9);
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(150, 160, 170);
@@ -187,7 +187,7 @@
                 doc.setFont('helvetica', 'normal');
                 doc.setFontSize(7);
                 doc.setTextColor(140, 140, 140);
-                doc.text(`PegaProx ${PEGAPROX_VERSION ? 'v' + PEGAPROX_VERSION : ''}`, margin, pageH - 4);
+                doc.text(`${APP_NAME} ${PEGAPROX_VERSION ? 'v' + PEGAPROX_VERSION : ''}`, margin, pageH - 4);
                 doc.text('Confidential', pageW / 2, pageH - 4, { align: 'center' });
                 doc.text(`Page ${i} / ${totalPages}`, pageW - margin, pageH - 4, { align: 'right' });
             }

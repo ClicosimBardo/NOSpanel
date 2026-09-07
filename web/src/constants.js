@@ -13,6 +13,7 @@
         
         // NS: Central version constant - keep in sync with backend PEGAPROX_VERSION
         const PEGAPROX_VERSION = "1.1.0";
+        const APP_NAME = 'NosPanel'; // NosPanel fork brand name (visible strings)
         const DEBUG = false; // set true for verbose logging
 
         // NS: global time formatting — reads user pref from localStorage

@@ -54,7 +54,7 @@
 
             // Translation function with English fallback
             const t = useCallback((key) => {
-                return translations[language]?.[key] || translations['en']?.[key] || key;
+                return (translations[language]?.[key] || translations['en']?.[key] || key).replace(/PegaProx/g, APP_NAME);
             }, [language]);
 
             // Internal: validate + persist locally. Used by both code paths.
