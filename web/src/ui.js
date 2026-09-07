@@ -10,10 +10,10 @@
         function getLogoSrc() {
             try {
                 return document.body?.dataset?.corpTheme === 'light'
-                    ? '/images/pegaprox-logo-light.png'
-                    : '/images/pegaprox-logo-dark.png';
+                    ? '/images/nospanel-logo-light.png'
+                    : '/images/nospanel-logo-dark.png';
             } catch (_) {
-                return '/images/pegaprox-logo-dark.png';
+                return '/images/nospanel-logo-dark.png';
             }
         }
 
@@ -26,7 +26,7 @@
         async function _loadPdfLogo() {
             if (_pdfLogoCache) return _pdfLogoCache;
             try {
-                const resp = await fetch('/images/pegaprox-logo-light.png');
+                const resp = await fetch('/images/nospanel-logo-light.png');
                 const blob = await resp.blob();
                 return new Promise((resolve) => {
                     const reader = new FileReader();

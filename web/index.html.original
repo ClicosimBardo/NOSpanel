@@ -75,7 +75,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PegaProx • Cluster Management for Proxmox VE</title>
+    <title>NosPanel • Cluster Management for Proxmox VE</title>
     <meta name="google" content="notranslate">
     
     <!-- LW May 2026 — preconnect removed. We're local-first now (libs are bundled
@@ -95,7 +95,7 @@
     <meta name="theme-color" content="#E57000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PegaProx">
+    <meta name="apple-mobile-web-app-title" content="NosPanel">
     <script>
         // Register service worker as soon as possible. SW handles offline shell + push.
         if ('serviceWorker' in navigator) {
@@ -3627,7 +3627,7 @@
             animation: spin 1s linear infinite;
         "></div>
         <div style="color: #e26d41; font-size: 24px; font-weight: 600; margin-top: 24px;">
-            PegaProx
+            NosPanel
         </div>
         <div style="color: #888; font-size: 14px; margin-top: 8px;">
             Loading...

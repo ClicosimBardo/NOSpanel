@@ -1,6 +1,6 @@
 {
-  "name": "PegaProx",
-  "short_name": "PegaProx",
+  "name": "NosPanel",
+  "short_name": "NosPanel",
   "description": "Multi-cluster Proxmox VE management",
   "start_url": "/",
   "scope": "/",
@@ -10,8 +10,8 @@
   "orientation": "any",
   "lang": "en",
   "icons": [
-    { "src": "/images/pegaprox.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/images/pegaprox.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/images/nospanel.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/images/nospanel.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "categories": ["productivity", "utilities"]
 }

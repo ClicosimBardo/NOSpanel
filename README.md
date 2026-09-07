@@ -1,12 +1,12 @@
 <p align="center">
   <picture>
     <!-- GitHub dark mode → swap to light variant so it stays readable -->
-    <source media="(prefers-color-scheme: dark)" srcset="images/pegaprox-logo-light.png">
-    <img src="images/pegaprox-logo-dark.png" alt="PegaProx Logo" width="220"/>
+    <source media="(prefers-color-scheme: dark)" srcset="images/nospanel-logo-light.png">
+    <img src="images/nospanel-logo-dark.png" alt="NosPanel Logo" width="220"/>
   </picture>
 </p>
 
-<h1 align="center">PegaProx</h1>
+<h1 align="center">NosPanel</h1>
 
 <p align="center">
   <strong>Modern Multi-Cluster Management for Proxmox VE & XCP-ng</strong>

@@ -439,8 +439,8 @@
                         <span className="cloud-nav-brand-mark">
                             <img
                                 src={(typeof document !== 'undefined' && document.body && document.body.dataset.cloudTheme === 'light')
-                                    ? '/images/pegaprox-logo-light.png'
-                                    : '/images/pegaprox-logo-dark.png'}
+                                    ? '/images/nospanel-logo-light.png'
+                                    : '/images/nospanel-logo-dark.png'}
                                 alt="PegaProx"
                                 onError={(e) => { e.target.style.display = 'none'; const s = e.target.nextSibling; if (s) s.style.display = 'inline-flex'; }}
                             />

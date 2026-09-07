@@ -7,7 +7,7 @@ const CACHE_NAME = 'pegaprox-shell-v3';
 const SHELL_ASSETS = [
   '/',
   '/manifest.webmanifest',
-  '/images/pegaprox.png',
+  '/images/nospanel.png',
   '/favicon.ico',
 ];
 
@@ -62,8 +62,8 @@ self.addEventListener('push', (e) => {
           // wake-up arrived but nothing in inbox (could be a test or already-cleared)
           return self.registration.showNotification('PegaProx', {
             body: 'You have a new alert',
-            icon: '/images/pegaprox.png',
-            badge: '/images/pegaprox.png',
+            icon: '/images/nospanel.png',
+            badge: '/images/nospanel.png',
             tag: 'pegaprox-generic',
           });
         }
@@ -72,8 +72,8 @@ self.addEventListener('push', (e) => {
         const sev = (item.severity || 'info').toLowerCase();
         const opts = {
           body: item.body || '',
-          icon: '/images/pegaprox.png',
-          badge: '/images/pegaprox.png',
+          icon: '/images/nospanel.png',
+          badge: '/images/nospanel.png',
           tag: item.tag || `pegaprox-${item.id}`,
           renotify: true,
           requireInteraction: sev === 'critical',
@@ -85,7 +85,7 @@ self.addEventListener('push', (e) => {
         // network down or session expired — best-effort generic notification
         return self.registration.showNotification('PegaProx', {
           body: 'New activity (open the app to view)',
-          icon: '/images/pegaprox.png',
+          icon: '/images/nospanel.png',
           tag: 'pegaprox-fallback',
         });
       })
