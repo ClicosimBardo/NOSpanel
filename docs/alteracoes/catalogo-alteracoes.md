@@ -38,7 +38,7 @@
 
 | ID | Mudança | Escopo/impacto |
 |---|---|---|
-| R1 | Inventário de marca (título/subtítulo do app, chaves de tradução de brand, manifestos, README, `NOTICE`/licenciamento, changelog) | Inventário entregue em `docs/mapping/inventario-rebranding.md`; **execução autorizada (2026-09-06)** — camada 1 concluída (assets/ícones/favicons/títulos: commit `8979bd2`); pendentes: strings/traduções visíveis, constantes/logs/back-end, empacotamento (debian/systemd), README completo |
+| R1 | Inventário de marca (título/subtítulo do app, chaves de tradução de brand, manifestos, README, `NOTICE`/licenciamento, changelog) | Inventário entregue em `docs/mapping/inventario-rebranding.md`; **execução autorizada (2026-09-06)** — camada 1 concluída (assets/ícones/favicons/títulos: commit `8979bd2`); pendentes: empacotamento (debian/systemd) e revisão final do README; strings visíveis cobertas via t(); backend textual concluído (commit `2806ebd`) |
 
 ## Pontos de decisão pendentes (discussão)
 
