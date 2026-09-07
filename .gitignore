@@ -39,3 +39,6 @@ archive/
 .zed/
 *.swp
 *.swo
+
+# Local AI tooling metadata (Serena MCP)
+.serena/
