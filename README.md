@@ -115,6 +115,11 @@ The name **PegaProx** is inspired by *Pegasus*, the winged horse of Greek mythol
   <a href="https://pegaprox.com/sponsors.html">Commercial Support</a>
 </p>
 
+### NosPanel Sponsors
+
+- **Clicosim Ltda** - [www.clicosim.com.br](https://www.clicosim.com.br)
+- **NOS Nitro Open Source** - [nos.dev.br](https://nos.dev.br)
+
 ## ✨ Features
 
 ### Multi-Cluster Management
