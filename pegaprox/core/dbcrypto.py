@@ -3,14 +3,14 @@ DB connection abstraction with optional SQLCipher full-DB encryption.
 
 Why this module exists
 ----------------------
-PegaProx 0.9.9.x encrypted *individual sensitive fields* (passwords, SSH keys,
+NosPanel 0.9.9.x encrypted *individual sensitive fields* (passwords, SSH keys,
 TOTP secrets) with Fernet inside an otherwise plain SQLite database.  That
 left a lot of operational data in cleartext: hostnames, audit metadata,
 session tokens, plugin state.  A leaked DB backup gave an attacker enough
 context to plan a follow-up attack — even without the secret.key.
 
 This module adds a transparent SQLCipher backend.  When sqlcipher3 is
-importable (Linux x86_64 via pip wheel today), every PegaProx DB connection
+importable (Linux x86_64 via pip wheel today), every NosPanel DB connection
 is automatically AES-256-CBC + HMAC-SHA512 encrypted at rest using the
 master key resolved by `pegaprox.core.keystore`.
 
@@ -146,7 +146,7 @@ def backend_status() -> dict:
 # ─── Connection ─────────────────────────────────────────────────────────────
 
 def connect(db_path: str, *, timeout: float = 30.0, **kwargs):
-    """Open a connection to the PegaProx DB.
+    """Open a connection to the NosPanel DB.
 
     When the SQLCipher backend is active, this:
       1. Opens the underlying file
@@ -219,7 +219,7 @@ def _apply_sqlcipher_pragmas(conn, db_path: str) -> None:
 
 # ─── Off-hub heavy reads (scaling) ───────────────────────────────────────────
 # NS 2026-06-04 — measured scaling fix for large fleets (#526/#528 class).
-# PegaProx runs on a single gevent hub thread: every greenlet (all per-cluster
+# NosPanel runs on a single gevent hub thread: every greenlet (all per-cluster
 # poll/balance loops + the WSGI request handlers) cooperatively shares ONE OS
 # thread. A sqlite3/SQLCipher query is a C call that does NOT yield to gevent,
 # so a heavy read freezes the ENTIRE hub for its full duration — measured at

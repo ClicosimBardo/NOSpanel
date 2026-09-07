@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Cluster Manager - Layer 5
+NosPanel Cluster Manager - Layer 5
 Main cluster management: Proxmox API, load balancing, HA.
 """
 
@@ -76,7 +76,7 @@ try:
 except ImportError:
     pass
 
-# H1 (scale audit 2026-06-05): negative-cache UPIDs whose initiating PegaProx user
+# H1 (scale audit 2026-06-05): negative-cache UPIDs whose initiating NosPanel user
 # can't be resolved from audit_log. The get_tasks() audit-log LIKE fallback runs
 # on the hub every ~1s broadcast tick per unmatched task; system/automation tasks
 # (cron vzdump, replication, HA) never match, so without this they re-scan forever.
@@ -166,7 +166,7 @@ class UpdateTask:
         }
 
 
-# NS 2026-04-24 — When PegaProx SSH'es in as pegaprox@pam (NOPASSWD sudo), every
+# NS 2026-04-24 — When NosPanel SSH'es in as pegaprox@pam (NOPASSWD sudo), every
 # privileged command plus anything that writes to /etc or /opt needs to actually
 # run as root. Naive `sudo {cmd}` prefix breaks heredocs and pipe redirects —
 # `sudo cat > /etc/foo` opens the redirect in the unprivileged shell.
@@ -712,7 +712,7 @@ class PegaProxManager:
     def api_port(self) -> int:
         """Proxmox API port — defaults to 8006 but overridable per-cluster.
         MK May 2026 — added so deployments with non-standard PVE listen ports
-        (firewall constraints, jumpbox setups) can use PegaProx without
+        (firewall constraints, jumpbox setups) can use NosPanel without
         forcing a reverse-proxy in front of PVE (which would terminate TLS
         and create a MitM-able intermediate hop)."""
         return getattr(self.config, 'api_port', 8006)
@@ -923,7 +923,7 @@ class PegaProxManager:
             self.last_successful_request = datetime.now()
             self.connection_error = None
             self._consecutive_failures = 0
-            self._auto_capture_upid(resp)  # MK May 2026 — bind PVE task to PegaProx user
+            self._auto_capture_upid(resp)  # MK May 2026 — bind PVE task to NosPanel user
             self._record_api_sample('POST', url, (time.monotonic() - t0) * 1000.0, resp.status_code)
             if resp.status_code == 401:
                 self._ticket = None
@@ -1007,7 +1007,7 @@ class PegaProxManager:
     def _auto_capture_upid(self, response):
         """MK May 2026 — every PVE write call that creates an async task returns
         a UPID in `data` (e.g. `UPID:pve1:000ABC:0123:...:qmstart:100:root@pam!tok:`).
-        Sniff it on the way back, look up the calling PegaProx user from the Flask
+        Sniff it on the way back, look up the calling NosPanel user from the Flask
         request context, persist the binding. Catches every endpoint that doesn't
         manually call register_task_user — which is the long tail (snapshots,
         config edits, migrations, replication runs, …). Any failure here MUST
@@ -1220,7 +1220,7 @@ class PegaProxManager:
                                        "Password login only returns a partial ticket that cannot be used "
                                        "for API access. Either add the cluster with an API token "
                                        "(Datacenter → Permissions → API Tokens), or temporarily disable "
-                                       "two-factor authentication on the account to add it (PegaProx "
+                                       "two-factor authentication on the account to add it (NosPanel "
                                        "creates an API token automatically), then re-enable it.")
                                 self.logger.warning(f"{host}: account requires 2FA (NeedTFA) — password auth cannot proceed")
                                 self._ticket = None
@@ -1358,7 +1358,7 @@ class PegaProxManager:
             # NS: need to set ticket cookie on login session, it only has it in the response not as a cookie
             session.cookies.set('PVEAuthCookie', self._ticket)
             headers = {'CSRFPreventionToken': self._csrf_token}
-            payload = {'privsep': '0', 'expire': '0', 'comment': 'PegaProx management token'}
+            payload = {'privsep': '0', 'expire': '0', 'comment': 'NosPanel management token'}
 
             resp = session.post(url, data=payload, headers=headers, timeout=10)
 
@@ -1823,7 +1823,7 @@ class PegaProxManager:
                     else:
                         # Node exists but we couldn't get status - might be offline
                         # MK May 2026 (#484) — keep the maintenance keys populated
-                        # even when status_data is missing. PegaProx's internal
+                        # even when status_data is missing. NosPanel's internal
                         # nodes_in_maintenance dict is the source of truth here;
                         # if we drop the keys during a reboot the sidebar reads
                         # undefined and shows "(Offline)" with no maintenance
@@ -3520,7 +3520,7 @@ class PegaProxManager:
             t.daemon = True
             t.start()
 
-        # #720 — persist SOFT (non-HA) maintenance so it survives a PegaProx restart. Native HA
+        # #720 — persist SOFT (non-HA) maintenance so it survives a NosPanel restart. Native HA
         # maintenance is re-derived from PVE on each poll (#78), so we don't store that here.
         if not getattr(task, 'native_ha', False):
             try:
@@ -3953,7 +3953,7 @@ class PegaProxManager:
     def exit_maintenance_mode(self, node_name):
         # NS May 2026 — clear native HA flag *before* clearing the internal state.
         # Old order: del state -> ssh call. If ssh failed (e.g. node still booting
-        # ha-services), PVE stayed in maintenance with no PegaProx-side trace.
+        # ha-services), PVE stayed in maintenance with no NosPanel-side trace.
         with self.maintenance_lock:
             if node_name not in self.nodes_in_maintenance:
                 return False
@@ -5273,7 +5273,7 @@ class PegaProxManager:
     #
     # How it works:
     # 1. Node appears dead (no API response)
-    # 2. PegaProx tries SSH to the "dead" node
+    # 2. NosPanel tries SSH to the "dead" node
     # 3. If SSH works → Node is ALIVE (network split!)
     #    → Stop VMs on that node via SSH
     #    → Then start VMs on surviving node
@@ -5495,8 +5495,8 @@ class PegaProxManager:
     # ═══════════════════════════════════════════════════════════════════════════
     
     _SELF_FENCE_AGENT_SCRIPT = '''#!/bin/bash
-# PegaProx Self-Fence Agent
-# NS: split-brain prevention + auto-recovery of the PegaProx VM itself
+# NosPanel Self-Fence Agent
+# NS: split-brain prevention + auto-recovery of the NosPanel VM itself
 
 MANAGER_IP="__MANAGER_IP__"
 OTHER_NODES="__OTHER_NODES__"  # comma-separated list
@@ -5560,7 +5560,7 @@ stop_all_vms() {
     log "All VMs/CTs stopped"
 }
 
-# MK: try to bring back PegaProx when manager is down but cluster is healthy
+# MK: try to bring back NosPanel when manager is down but cluster is healthy
 try_restart_pegaprox_vm() {
     [ -z "$PEGAPROX_VMID" ] && return 1
 
@@ -5576,7 +5576,7 @@ try_restart_pegaprox_vm() {
     fi
 
     log "════════════════════════════════════════════════════════"
-    log "MANAGER DOWN - attempting PegaProx VM $PEGAPROX_VMID restart"
+    log "MANAGER DOWN - attempting NosPanel VM $PEGAPROX_VMID restart"
     log "════════════════════════════════════════════════════════"
 
     # check if we can see this VM at all
@@ -5597,7 +5597,7 @@ try_restart_pegaprox_vm() {
         # give it time to boot
         sleep 30
         if can_reach_manager; then
-            log "PegaProx VM recovered successfully"
+            log "NosPanel VM recovered successfully"
         else
             log "VM started but manager not yet reachable, might need more time"
         fi
@@ -5607,9 +5607,9 @@ try_restart_pegaprox_vm() {
     return 0
 }
 
-log "PegaProx Self-Fence Agent starting"
+log "NosPanel Self-Fence Agent starting"
 log "Manager: $MANAGER_IP | Other nodes: $OTHER_NODES"
-log "PegaProx VMID: ${PEGAPROX_VMID:-not configured}"
+log "NosPanel VMID: ${PEGAPROX_VMID:-not configured}"
 log "Thresholds: isolation=$FAIL_THRESHOLD, recovery=$MGR_RECOVERY_THRESHOLD"
 
 while true; do
@@ -5625,7 +5625,7 @@ while true; do
         FAIL_COUNT=0
         MGR_DOWN_COUNT=0
     elif [ $nodes_ok -eq 1 ]; then
-        # manager down but nodes reachable -> PegaProx probably crashed
+        # manager down but nodes reachable -> NosPanel probably crashed
         ((MGR_DOWN_COUNT++))
         FAIL_COUNT=0
         log "Manager unreachable, other nodes OK ($MGR_DOWN_COUNT/$MGR_RECOVERY_THRESHOLD)"
@@ -5689,10 +5689,10 @@ done
     def _ha_install_self_fence_agent(self, node_name: str, node_ip: str) -> bool:
         """install self-fence agent on a node via SSH"""
         try:
-            # Get manager IP (this PegaProx server)
+            # Get manager IP (this NosPanel server)
             manager_ip = self._get_pegaprox_server_ip()
             if not manager_ip:
-                self.logger.error(f"[HA] Cannot determine PegaProx server IP!")
+                self.logger.error(f"[HA] Cannot determine NosPanel server IP!")
                 return False
             
             # Get other node IPs
@@ -5731,7 +5731,7 @@ chmod +x /usr/local/bin/pegaprox-agent.sh
 
 cat > /etc/systemd/system/pegaprox-agent.service << 'SERVICEEOF'
 [Unit]
-Description=PegaProx Self-Fence Agent
+Description=NosPanel Self-Fence Agent
 After=network.target pve-cluster.service
 
 [Service]
@@ -5785,7 +5785,7 @@ echo "AGENT_INSTALLED"
             return False
     
     def _get_pegaprox_server_ip(self) -> str:
-        """Get the IP address of this PegaProx server that nodes can reach"""
+        """Get the IP address of this NosPanel server that nodes can reach"""
         import socket
         
         # Try to get the IP we use to connect to the cluster
@@ -6421,7 +6421,7 @@ echo "AGENT_UNINSTALLED"
     
     # Minimal node agent script - embedded as string for auto-deployment
     _NODE_AGENT_SCRIPT = '''#!/bin/bash
-# PegaProx Node Agent - Auto-installed for Dual-Network Split-Brain Protection
+# NosPanel Node Agent - Auto-installed for Dual-Network Split-Brain Protection
 # This agent communicates via STORAGE network, not server network!
 
 STORAGE_PATH="__STORAGE_PATH__"
@@ -6438,7 +6438,7 @@ POISON_ACK_FILE="${PEGAPROX_DIR}/poison_ack_${NODE_NAME}"
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> /var/log/pegaprox-agent.log; }
 
-# MK 2026-06-03: same quorum-aware gate as the self-fence agent. PegaProx's
+# MK 2026-06-03: same quorum-aware gate as the self-fence agent. NosPanel's
 # server-side recovery worker can drop a poison pill in response to a
 # transient API unreachability (e.g. a peer node rebooting). If we're still
 # part of the corosync majority, that pill is a false positive and stopping
@@ -6488,7 +6488,7 @@ check_poison() {
     fi
 }
 
-log "PegaProx Node Agent starting (storage: $STORAGE_PATH)"
+log "NosPanel Node Agent starting (storage: $STORAGE_PATH)"
 while true; do
     write_heartbeat
     check_poison
@@ -6497,7 +6497,7 @@ done
 '''
 
     _NODE_AGENT_SERVICE = '''[Unit]
-Description=PegaProx Node Agent (Dual-Network Split-Brain Protection)
+Description=NosPanel Node Agent (Dual-Network Split-Brain Protection)
 After=network.target pve-cluster.service
 Wants=pve-cluster.service
 
@@ -6843,7 +6843,7 @@ echo "AGENT_INSTALLED_OK"
         
         while not self.ha_heartbeat_stop.is_set():
             try:
-                # Write heartbeat for this PegaProx instance
+                # Write heartbeat for this NosPanel instance
                 heartbeat_file = os.path.join(heartbeat_dir, f'heartbeat_pegaprox_{self.id}')
                 heartbeat_data = {
                     'timestamp': datetime.now().isoformat(),
@@ -6990,7 +6990,7 @@ echo "AGENT_INSTALLED_OK"
                         # If we're connected to this node, we should NOT start VMs on it
                         if self.current_host and node_name in self.current_host:
                             self.logger.critical(f"[HA] We are connected to poisoned node! Switching connection...")
-                            # Don't start new VMs, let the other PegaProx instance handle recovery
+                            # Don't start new VMs, let the other NosPanel instance handle recovery
                     
         except Exception as e:
             self.logger.error(f"[HA] Error checking poison pills: {e}")
@@ -7059,7 +7059,7 @@ echo "AGENT_INSTALLED_OK"
     def _ha_acquire_recovery_lock(self, failed_node: str) -> bool:
         """Try to acquire a distributed lock for recovery
         
-        Only one PegaProx instance should perform recovery at a time.
+        Only one NosPanel instance should perform recovery at a time.
         This prevents multiple recovery attempts from different sources.
         """
         storage_path = self.ha_config.get('storage_heartbeat_path')
@@ -7476,7 +7476,7 @@ echo "AGENT_INSTALLED_OK"
     # 3. The storage then REFUSES all I/O from the dead node
     # 4. Even if the node is alive, it cannot corrupt data!
     #
-    # Requires: sg3_utils package on PegaProx server and nodes
+    # Requires: sg3_utils package on NosPanel server and nodes
     # Works with: iSCSI, FC, SAS (any SCSI device)
     # ═══════════════════════════════════════════════════════════════════════════
     
@@ -8007,7 +8007,7 @@ echo "AGENT_INSTALLED_OK"
                         'id': task.get('id', ''),
                     }
                     
-                    # NS: Add PegaProx user who initiated this task (if known)
+                    # NS: Add NosPanel user who initiated this task (if known)
                     from pegaprox.api.helpers import get_task_user
                     pegaprox_user = get_task_user(task_info['upid'])
                     if pegaprox_user:
@@ -8561,7 +8561,7 @@ echo "AGENT_INSTALLED_OK"
             # cluster/status reports each node's "ip" field, which can be:
             #  - the mgmt IP (great -> return it)
             #  - the corosync ring IP on a dedicated cluster VLAN (bad ->
-            #    reachable on 8006 but NOT on SSH from the PegaProx server)
+            #    reachable on 8006 but NOT on SSH from the NosPanel server)
             # So we only trust it if it sits in primary_network (STEP 1)
             # and probes on the SSH port.
             # ================================================================
@@ -9583,7 +9583,7 @@ echo "AGENT_INSTALLED_OK"
             data = {
                 'privsep': 0,  # No privilege separation - token has same permissions as user
                 'expire': 0,   # No expiration (we'll delete it manually)
-                'comment': 'PegaProx temporary migration token'
+                'comment': 'NosPanel temporary migration token'
             }
             return self._api_post(url, data=data)
 
@@ -11791,7 +11791,7 @@ echo "AGENT_INSTALLED_OK"
             # /usr/share/perl5/PVE/QemuServer.pm). Was 'virtio-scsi-pci' here
             # which made the Configure dropdown lie about what PVE actually
             # uses when scsihw is omitted from config — user reported in
-            # comments that picking VirtIO in PegaProx left PVE on LSI; turns
+            # comments that picking VirtIO in NosPanel left PVE on LSI; turns
             # out the dropdown was already showing VirtIO without anything to
             # save against, so the user's "no-op" save kept PVE's lsi default.
             parsed['hardware'] = {
@@ -12764,7 +12764,7 @@ echo "AGENT_INSTALLED_OK"
             except Exception as e:
                 self.logger.debug(f"[SYNC] SCP error: {e}")
 
-            # method 2: sftp relay through PegaProx
+            # method 2: sftp relay through NosPanel
             if not synced:
                 try:
                     self.logger.info(f"[SYNC] SFTP relay: {src_ip}:{src_file} → {tgt_ip}:{tgt_path}/{filename}")
@@ -13557,7 +13557,7 @@ echo "AGENT_INSTALLED_OK"
     ]
 
     def get_cpu_types(self) -> List[str]:
-        """Returns the list of CPU model names PegaProx offers in the VM create
+        """Returns the list of CPU model names NosPanel offers in the VM create
         form. Strategy:
           1) Live fetch from /nodes/{n}/capabilities/qemu/cpu on the first
              reachable online node. This endpoint has existed since PVE 7.x
@@ -13566,7 +13566,7 @@ echo "AGENT_INSTALLED_OK"
              with {name, vendor, custom} — we keep names verbatim, including
              custom-* models the admin defined.
           2) Fall back to the static 61-entry list on any error or when no
-             node is reachable. Same shape that PegaProx has been returning
+             node is reachable. Same shape that NosPanel has been returning
              since forever, so callers don't see breakage.
 
         MK May 2026 — was hardcoded to the static list; replaced with the live
@@ -15203,7 +15203,7 @@ echo "AGENT_INSTALLED_OK"
     
     def daemon_loop(self):
         """Main daemon loop"""
-        self.logger.info(f"PegaProx daemon started for cluster: {self.config.name}")
+        self.logger.info(f"NosPanel daemon started for cluster: {self.config.name}")
         
         # Initial connection with auto-discovery
         if not self.connect_to_proxmox():
@@ -15233,12 +15233,12 @@ echo "AGENT_INSTALLED_OK"
                         self.session = None
                         self.connect_to_proxmox()
                 
-                self.logger.debug("PegaProx is disabled, skipping check")
+                self.logger.debug("NosPanel is disabled, skipping check")
             
             # Wait for next interval or stop signal
             self.stop_event.wait(self.config.check_interval)
         
-        self.logger.info(f"PegaProx daemon stopped for cluster: {self.config.name}")
+        self.logger.info(f"NosPanel daemon stopped for cluster: {self.config.name}")
     
     def _check_connection(self) -> bool:
         """Check if connection to Proxmox is still alive"""
@@ -15560,7 +15560,7 @@ sed -i -e '/^Ciphers /d' -e '/^KexAlgorithms /d' -e '/^MACs /d' \
   -e '/^Banner /d' /etc/ssh/sshd_config
 cat >> /etc/ssh/sshd_config << 'SSHEOF'
 
-# CIS SSH Cryptographic Hardening (5.1.4-5.1.22) - applied by PegaProx
+# CIS SSH Cryptographic Hardening (5.1.4-5.1.22) - applied by NosPanel
 Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
@@ -15592,14 +15592,14 @@ echo DONE""",
 sed -i -E -e '/^[[:space:]]*PermitRootLogin[[:space:]]/Id' -e '/^[[:space:]]*MaxAuthTries[[:space:]]/Id' -e '/^[[:space:]]*X11Forwarding[[:space:]]/Id' -e '/^[[:space:]]*ClientAliveInterval[[:space:]]/Id' -e '/^[[:space:]]*ClientAliveCountMax[[:space:]]/Id' -e '/^[[:space:]]*LoginGraceTime[[:space:]]/Id' -e '/^[[:space:]]*AllowTcpForwarding[[:space:]]/Id' -e '/^[[:space:]]*PermitEmptyPasswords[[:space:]]/Id' /etc/ssh/sshd_config
 cat >> /etc/ssh/sshd_config << 'SSHDHEOF'
 
-# CIS SSH access hardening (#433) - applied by PegaProx
+# CIS SSH access hardening (#433) - applied by NosPanel
 PermitRootLogin prohibit-password
 MaxAuthTries 4
 X11Forwarding no
 ClientAliveInterval 300
 ClientAliveCountMax 3
 LoginGraceTime 60
-# AllowTcpForwarding is left at the sshd default on purpose — PegaProx's VNC console
+# AllowTcpForwarding is left at the sshd default on purpose — NosPanel's VNC console
 # tunnels to the node through an SSH direct-tcpip channel (utils/vnc_tunnel.py), which
 # 'AllowTcpForwarding no' would block. The sed above still strips any stale directive so
 # a node hardened by an older build heals back to the default (forwarding on) on re-apply.
@@ -15629,8 +15629,8 @@ echo DONE""",
         },
         'pam_faillock': {
             'check': """[ -f /etc/security/faillock.conf.d/cis-faillock.conf ] && echo OK || echo FAIL""",
-            # NS Apr 2026 — service-user-aware. Locking out the PegaProx service account
-            # would lock PegaProx out of the node it manages, so we ALWAYS exempt
+            # NS Apr 2026 — service-user-aware. Locking out the NosPanel service account
+            # would lock NosPanel out of the node it manages, so we ALWAYS exempt
             # `root` and `pegaprox` (hardcoded). Operator may add more accounts via
             # the optional service_user param (comma-separated).
             'apply_template': True,
@@ -15861,7 +15861,7 @@ echo DONE""",
             'apply': """sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS   365/' /etc/login.defs
 sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS   1/' /etc/login.defs
 sed -i 's/^PASS_WARN_AGE.*/PASS_WARN_AGE   30/' /etc/login.defs
-# Hardcoded exemptions: root + pegaprox (PegaProx service account)
+# Hardcoded exemptions: root + pegaprox (NosPanel service account)
 for u in root pegaprox $(echo "{service_user}" | tr ',' ' '); do
   [ -z "$u" ] && continue
   if id "$u" >/dev/null 2>&1; then
@@ -15989,7 +15989,7 @@ echo DONE""",
         'session_limit': {
             'check': """grep -q 'maxlogins' /etc/security/limits.conf 2>/dev/null && echo OK || echo FAIL""",
             # NS Apr 2026 — `root` and `pegaprox` always unlimited (hardcoded).
-            # PegaProx parallel-SSH (Phase 1) easily uses 8+ concurrent sessions
+            # NosPanel parallel-SSH (Phase 1) easily uses 8+ concurrent sessions
             # per cluster op; 10-session cap would intermittently fail.
             'apply_template': True,
             'apply': """sed -i '/maxlogins/d' /etc/security/limits.conf 2>/dev/null
@@ -15997,7 +15997,7 @@ cat >> /etc/security/limits.conf << 'SLEOF'
 
 # STIG UBTU-24-200000: Limit concurrent sessions
 * hard maxlogins 10
-# Always exempted - system + PegaProx service account
+# Always exempted - system + NosPanel service account
 root hard maxlogins -1
 pegaprox hard maxlogins -1
 SLEOF
@@ -16017,7 +16017,7 @@ echo DONE""",
 useradd -D 2>/dev/null | grep -q 'INACTIVE=35' && echo OK || echo FAIL""",
             # NS Apr 2026 — `root` and `pegaprox` ALWAYS exempted (hardcoded).
             # Whether SSH-only logins count toward `lastlog` varies by Linux flavour;
-            # better to be defensive and not auto-disable PegaProx's own access.
+            # better to be defensive and not auto-disable NosPanel's own access.
             'apply_template': True,
             'apply': """useradd -D -f 35
 # Hardcoded exemptions
@@ -16064,7 +16064,7 @@ echo DONE""",
             'check': """[ -f /etc/audit/rules.d/50-stig-extended.rules ] && echo OK || echo FAIL""",
             'apply': """apt-get install -y auditd >/dev/null 2>&1
 cat > /etc/audit/rules.d/50-stig-extended.rules << 'AUEOF'
-## STIG Extended Audit Rules - deployed by PegaProx
+## STIG Extended Audit Rules - deployed by NosPanel
 # buffer + failure mode
 -b 8192
 -f 1
@@ -16183,7 +16183,7 @@ echo DONE""",
 IMEOF
 echo DONE""",
         },
-        # --- PegaProx Recommendations ---
+        # --- NosPanel Recommendations ---
         'apparmor': {
             'check': """systemctl is-active apparmor 2>/dev/null | grep -q active && echo OK || echo FAIL""",
             'verbose_check': """systemctl is-active apparmor 2>/dev/null || echo 'not active' ; if command -v aa-status >/dev/null 2>&1 ; then aa-status --profiled 2>/dev/null | sed 's/^/profiles loaded: /' ; fi""",
@@ -16209,7 +16209,7 @@ echo DONE""",
             'check': """grep -q 'net.ipv4.conf.all.rp_filter = 1' /etc/sysctl.d/99-pegaprox-hardening.conf 2>/dev/null && echo OK || echo FAIL""",
             'verbose_check': """if [ -f /etc/sysctl.d/99-pegaprox-hardening.conf ]; then echo 'file exists:' ; grep -E '^[a-z]' /etc/sysctl.d/99-pegaprox-hardening.conf 2>/dev/null | head -10 ; echo '...' ; else echo 'file missing' ; fi ; echo '---live kernel values---' ; for k in net.ipv4.conf.all.rp_filter net.ipv4.tcp_syncookies kernel.randomize_va_space kernel.kptr_restrict ; do v=$(sysctl -n $k 2>/dev/null) ; echo "$k = $v" ; done""",
             'apply': """cat > /etc/sysctl.d/99-pegaprox-hardening.conf << 'SYSEOF'
-# PegaProx Security Hardening - sysctl parameters
+# NosPanel Security Hardening - sysctl parameters
 
 # IP Spoofing protection
 net.ipv4.conf.all.rp_filter = 1
@@ -16921,7 +16921,7 @@ echo DONE""",
             self.logger.debug(f"[MAINT] maintenance restore failed: {e}")
 
     def start(self):
-        """Start the PegaProx daemon"""
+        """Start the NosPanel daemon"""
         if self.running:
             return
 
@@ -16931,7 +16931,7 @@ echo DONE""",
         self.thread.daemon = True
         self.thread.start()
         self.running = True
-        self.logger.info(f"Started PegaProx manager for {self.config.name}")
+        self.logger.info(f"Started NosPanel manager for {self.config.name}")
         
         # Start HA monitor if enabled
         if self.config.ha_enabled:
@@ -16942,7 +16942,7 @@ echo DONE""",
         self._ip_refresh_thread.start()
 
     def stop(self):
-        """Stop the PegaProx daemon"""
+        """Stop the NosPanel daemon"""
         if not self.running:
             return
 
@@ -16960,4 +16960,4 @@ echo DONE""",
         if self.thread:
             self.thread.join(timeout=5)
         self.running = False
-        self.logger.info(f"Stopped PegaProx manager for {self.config.name}")
+        self.logger.info(f"Stopped NosPanel manager for {self.config.name}")

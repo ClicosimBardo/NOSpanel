@@ -1,5 +1,5 @@
 """
-PegaProx Ceph API Routes - Layer 6
+NosPanel Ceph API Routes - Layer 6
 Ceph cluster management: status, OSDs, monitors, pools, CephFS, RBD mirroring.
 """
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Metrics Collection - Layer 7
+NosPanel Metrics Collection - Layer 7
 Background metrics snapshot collection.
 """
 

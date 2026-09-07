@@ -3,14 +3,14 @@
 Prometheus / OpenMetrics exporter.
 
 MK Apr 2026: One endpoint — /api/metrics — that lets any Prometheus/Grafana stack
-scrape PegaProx with zero custom instrumentation. We expose a curated set of gauges
+scrape NosPanel with zero custom instrumentation. We expose a curated set of gauges
 that match what admins typically want to alert on (node down, high CPU, quorum
 at risk, etc). Most data is derived from existing in-memory state; APT update
 availability is queried through Proxmox and cached briefly per node.
 
 Auth: Bearer token via existing API tokens (admin-view role is enough), or the
 endpoint can be made public by setting `metrics_public: true` in server settings —
-some setups put PegaProx behind a mutual-TLS reverse proxy and want to skip auth.
+some setups put NosPanel behind a mutual-TLS reverse proxy and want to skip auth.
 """
 import time
 import logging
@@ -152,7 +152,7 @@ def prometheus_metrics():
     out = []
     emit = out.append
 
-    # ── PegaProx self metrics ──
+    # ── NosPanel self metrics ──
     emit('# HELP pegaprox_info Build information')
     emit('# TYPE pegaprox_info gauge')
     try:
@@ -177,24 +177,24 @@ def prometheus_metrics():
     emit('# HELP pegaprox_sessions_active Currently authenticated sessions')
     emit('# TYPE pegaprox_sessions_active gauge')
     out.extend(_sample('pegaprox_sessions_active', sess_total))
-    emit('# HELP pegaprox_users_logged_in Unique PegaProx users with an active session')
+    emit('# HELP pegaprox_users_logged_in Unique NosPanel users with an active session')
     emit('# TYPE pegaprox_users_logged_in gauge')
     out.extend(_sample('pegaprox_users_logged_in', len(active_users)))
 
     try:
         users = load_users(readonly=True) or {}
         enabled_users = sum(1 for u in users.values() if u.get('enabled', True))
-        emit('# HELP pegaprox_users_total Configured PegaProx user accounts')
+        emit('# HELP pegaprox_users_total Configured NosPanel user accounts')
         emit('# TYPE pegaprox_users_total gauge')
         out.extend(_sample('pegaprox_users_total', len(users)))
-        emit('# HELP pegaprox_users_enabled Enabled PegaProx user accounts')
+        emit('# HELP pegaprox_users_enabled Enabled NosPanel user accounts')
         emit('# TYPE pegaprox_users_enabled gauge')
         out.extend(_sample('pegaprox_users_enabled', enabled_users))
     except Exception as e:
         logging.debug(f"[metrics] user stats failed: {e}")
 
     # ── Clusters ──
-    emit('# HELP pegaprox_cluster_connected 1 if PegaProx can reach the cluster API')
+    emit('# HELP pegaprox_cluster_connected 1 if NosPanel can reach the cluster API')
     emit('# TYPE pegaprox_cluster_connected gauge')
     emit('# HELP pegaprox_cluster_nodes_total Node count per cluster')
     emit('# TYPE pegaprox_cluster_nodes_total gauge')

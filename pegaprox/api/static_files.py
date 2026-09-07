@@ -28,7 +28,7 @@ bp = Blueprint('static_files', __name__)
 
 
 # Pool Management API - NS Jan 2026
-# Create, edit, delete pools and manage pool members directly from PegaProx
+# Create, edit, delete pools and manage pool members directly from NosPanel
 # ============================================================================
 
 @bp.route('/api/clusters/<cluster_id>/pools', methods=['POST'])
@@ -165,7 +165,7 @@ def delete_pool(cluster_id, pool_id):
         # Invalidate cache
         invalidate_pool_cache(cluster_id)
         
-        # Also remove any PegaProx permissions for this pool
+        # Also remove any NosPanel permissions for this pool
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute('DELETE FROM pool_permissions WHERE cluster_id = ? AND pool_id = ?', (cluster_id, pool_id))

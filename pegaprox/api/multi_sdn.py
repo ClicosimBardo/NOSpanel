@@ -4,7 +4,7 @@ Cross-cluster EVPN SDN orchestration (#612, Phase 1) — MK Jul 2026.
 
 PVE has no cross-cluster SDN primitive: each cluster's /etc/pve/sdn config is
 entirely local (distributed only within that cluster's pmxcfs). To make one
-logical EVPN vNet "span" several clusters that share a BGP ASN, PegaProx has to
+logical EVPN vNet "span" several clusters that share a BGP ASN, NosPanel has to
 create the *same* EVPN controller (asn/peers), the *same* EVPN zone (vrf-vxlan),
 and the *same* vnet (tag/VNI/alias) on **every** member cluster and apply each.
 

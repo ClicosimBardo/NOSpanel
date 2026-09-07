@@ -1,4 +1,4 @@
-"""Compliance framework control mappings for PegaProx hardening checks.
+"""Compliance framework control mappings for NosPanel hardening checks.
 
 Maps internal hardening control IDs (e.g. 'pam_faillock') to the corresponding
 control references in major compliance frameworks.
@@ -16,7 +16,7 @@ Frameworks covered:
 - ISO/IEC 27001:2022 Annex A     (93 controls, 4 themes)
 - BSI IT-Grundschutz Kompendium  (modules SYS / OPS / NET / DER / CON / APP)
 - VS-NfD                         (largely a profile over BSI Grundschutz +
-                                  PegaProx-specific informational checks)
+                                  NosPanel-specific informational checks)
 
 Where a control has no direct mapping in a given framework, the entry is
 omitted (do NOT fabricate refs). The PDF generator surfaces 'no direct mapping'
@@ -929,23 +929,23 @@ FRAMEWORK_MAPPING = {
 REMEDIATION = {
     'pam_faillock': {
         'summary': 'Lock accounts after 5 failed login attempts.',
-        'how_to_fix': 'PegaProx > Settings > Hardening > Apply "PAM faillock". Manually: edit /etc/security/faillock.conf with deny=5, unlock_time=900, fail_interval=900, then enable faillock in /etc/pam.d/common-auth and common-account.',
+        'how_to_fix': 'NosPanel > Settings > Hardening > Apply "PAM faillock". Manually: edit /etc/security/faillock.conf with deny=5, unlock_time=900, fail_interval=900, then enable faillock in /etc/pam.d/common-auth and common-account.',
     },
     'session_limit': {
         'summary': 'Limit concurrent sessions per user (TMOUT + maxlogins).',
-        'how_to_fix': 'Set TMOUT=900 in /etc/profile.d/tmout.sh and maxlogins in /etc/security/limits.conf. Apply via PegaProx hardening or manual.',
+        'how_to_fix': 'Set TMOUT=900 in /etc/profile.d/tmout.sh and maxlogins in /etc/security/limits.conf. Apply via NosPanel hardening or manual.',
     },
     'shell_timeout': {
         'summary': 'Auto-logout idle interactive shells after a defined idle time.',
-        'how_to_fix': 'Set TMOUT=900 in /etc/profile.d/tmout.sh and ensure it is exported and read-only. PegaProx hardening apply handles this.',
+        'how_to_fix': 'Set TMOUT=900 in /etc/profile.d/tmout.sh and ensure it is exported and read-only. NosPanel hardening apply handles this.',
     },
     'login_banners': {
         'summary': 'Display a legal/security warning banner before login.',
-        'how_to_fix': 'Populate /etc/issue, /etc/issue.net, /etc/motd with the appropriate notice (DoD CnC banner for federal use). Apply via PegaProx.',
+        'how_to_fix': 'Populate /etc/issue, /etc/issue.net, /etc/motd with the appropriate notice (DoD CnC banner for federal use). Apply via NosPanel.',
     },
     'inactive_accounts': {
         'summary': 'Disable user accounts after a defined period of inactivity (35 days for STIG).',
-        'how_to_fix': 'Set INACTIVE=35 in /etc/default/useradd and run useradd -D -f 35. PegaProx hardening enforces 35 days by default.',
+        'how_to_fix': 'Set INACTIVE=35 in /etc/default/useradd and run useradd -D -f 35. NosPanel hardening enforces 35 days by default.',
     },
     'pw_quality': {
         'summary': 'Enforce password complexity (length, character classes).',
@@ -961,7 +961,7 @@ REMEDIATION = {
     },
     'pw_hash_rounds': {
         'summary': 'Use strong password hashing (yescrypt or SHA-512 with rounds≥5000).',
-        'how_to_fix': 'In /etc/pam.d/common-password: pam_unix.so ... yescrypt rounds=5 OR sha512 rounds=10000. PegaProx enforces yescrypt by default.',
+        'how_to_fix': 'In /etc/pam.d/common-password: pam_unix.so ... yescrypt rounds=5 OR sha512 rounds=10000. NosPanel enforces yescrypt by default.',
     },
     'ssh_crypto': {
         'summary': 'Restrict SSH to strong ciphers, KEX algorithms and MACs only.',
@@ -973,7 +973,7 @@ REMEDIATION = {
     },
     'file_perms': {
         'summary': 'Critical config files have correct ownership and restrictive perms.',
-        'how_to_fix': 'PegaProx hardening apply enforces 644/640/600 on /etc/passwd, /etc/shadow, /etc/gshadow, /etc/group and similar.',
+        'how_to_fix': 'NosPanel hardening apply enforces 644/640/600 on /etc/passwd, /etc/shadow, /etc/gshadow, /etc/group and similar.',
     },
     'default_umask': {
         'summary': 'Default umask 027 so newly created files are not world-readable.',
@@ -1001,7 +1001,7 @@ REMEDIATION = {
     },
     'audit_rules': {
         'summary': 'auditd has rules for time changes, account events, MAC changes, network changes, file deletes, privilege use, etc.',
-        'how_to_fix': 'Drop a CIS-aligned ruleset into /etc/audit/rules.d/cis.rules and run augenrules --load. PegaProx hardening ships a complete ruleset.',
+        'how_to_fix': 'Drop a CIS-aligned ruleset into /etc/audit/rules.d/cis.rules and run augenrules --load. NosPanel hardening ships a complete ruleset.',
     },
     'audit_boot': {
         'summary': 'Kernel auditing is enabled at boot via audit=1 GRUB parameter.',
@@ -1045,7 +1045,7 @@ REMEDIATION = {
     },
     'sysctl_hardening': {
         'summary': 'Network/kernel sysctl hardening (rp_filter, syncookies, kptr_restrict, dmesg_restrict, etc.).',
-        'how_to_fix': 'PegaProx ships /etc/sysctl.d/99-pegaprox-hardening.conf with the full set. Apply via the hardening UI or sysctl --system.',
+        'how_to_fix': 'NosPanel ships /etc/sysctl.d/99-pegaprox-hardening.conf with the full set. Apply via the hardening UI or sysctl --system.',
     },
     'pkg_cleanup': {
         'summary': 'Remove unused/orphaned packages.',
@@ -1077,7 +1077,7 @@ REMEDIATION = {
     },
     'pve_fail2ban': {
         'summary': 'fail2ban running with a [proxmox] jail for pveproxy/pvedaemon brute-force protection.',
-        'how_to_fix': 'PegaProx > Settings > Hardening > Apply "fail2ban (PVE)". Auto-detects Debian version and picks iptables or nftables banaction.',
+        'how_to_fix': 'NosPanel > Settings > Hardening > Apply "fail2ban (PVE)". Auto-detects Debian version and picks iptables or nftables banaction.',
     },
     'apt_show_versions': {
         'summary': 'apt-show-versions is installed for tracking which packages have updates pending.',
@@ -1093,11 +1093,11 @@ REMEDIATION = {
     },
     'pam_password_repair': {
         'summary': 'Repairs a broken /etc/pam.d/common-password stack where pam_pwhistory.so use_authtok appears without a preceding pam_pwquality.so. Triggers "Authentication token manipulation error" on every passwd call until repaired.',
-        'how_to_fix': 'PegaProx > Settings > Hardening > Apply "Repair PAM password stack (recovery)". Either inserts pam_pwquality.so before pam_pwhistory.so (preferred) or strips use_authtok from pwhistory if libpam-pwquality is not installed. Backup of the original file is saved as common-password.bak.repair-<timestamp>.',
+        'how_to_fix': 'NosPanel > Settings > Hardening > Apply "Repair PAM password stack (recovery)". Either inserts pam_pwquality.so before pam_pwhistory.so (preferred) or strips use_authtok from pwhistory if libpam-pwquality is not installed. Backup of the original file is saved as common-password.bak.repair-<timestamp>.',
     },
     'vsnfd_disk_encryption': {
         'summary': 'Disk encryption (LUKS or ZFS native) for VS-NfD-classified data at rest.',
-        'how_to_fix': 'INFORMATIONAL — must be planned at install time. PegaProx cannot retroactively encrypt; document operator decision per BSI guidance.',
+        'how_to_fix': 'INFORMATIONAL — must be planned at install time. NosPanel cannot retroactively encrypt; document operator decision per BSI guidance.',
     },
     'vsnfd_audit_retention': {
         'summary': 'journald MaxRetentionSec ≥ 6 months for VS-NfD audit retention.',
@@ -1109,7 +1109,7 @@ REMEDIATION = {
     },
     'vsnfd_secure_boot': {
         'summary': 'UEFI Secure Boot is enabled (or documented as compensating control).',
-        'how_to_fix': 'INFORMATIONAL — enable Secure Boot in UEFI; ensure shim/grub are signed. PegaProx detects but cannot enable Secure Boot.',
+        'how_to_fix': 'INFORMATIONAL — enable Secure Boot in UEFI; ensure shim/grub are signed. NosPanel detects but cannot enable Secure Boot.',
     },
     'vsnfd_kernel_lockdown': {
         'summary': 'Linux kernel lockdown mode (integrity or confidentiality) is active.',
@@ -1117,7 +1117,7 @@ REMEDIATION = {
     },
     'vsnfd_password_min_12': {
         'summary': 'Minimum password length 12 (BSI-conformant).',
-        'how_to_fix': 'Set minlen=12 in /etc/security/pwquality.conf (PegaProx CIS profile uses minlen=14 by default which already satisfies this).',
+        'how_to_fix': 'Set minlen=12 in /etc/security/pwquality.conf (NosPanel CIS profile uses minlen=14 by default which already satisfies this).',
     },
 }
 
@@ -1233,7 +1233,7 @@ FRAMEWORK_META = {
         'revision':     'NIST SP 800-53 Rev. 5, September 2020',
         'source_url':   'https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final',
         'control_count': 287,
-        'note':         'Federal civilian baseline. Mod baseline = ~287 controls. PegaProx maps the technical-control subset relevant to a Linux hypervisor.',
+        'note':         'Federal civilian baseline. Mod baseline = ~287 controls. NosPanel maps the technical-control subset relevant to a Linux hypervisor.',
     },
     'stig': {
         'full_name':    'DISA STIG (RHEL 9 / Ubuntu 22.04)',
@@ -1247,35 +1247,35 @@ FRAMEWORK_META = {
         'revision':     'ISO/IEC 27001:2022, October 2022 — supersedes 2013 / 2017 amendments',
         'source_url':   'https://www.iso.org/standard/27001',
         'control_count': 93,
-        'note':         '93 controls in 4 themes: Organizational, People, Physical, Technological. PegaProx covers the Technological controls applicable to Linux node hardening.',
+        'note':         '93 controls in 4 themes: Organizational, People, Physical, Technological. NosPanel covers the Technological controls applicable to Linux node hardening.',
     },
     'bsi': {
         'full_name':    'BSI IT-Grundschutz Kompendium',
         'revision':     'BSI IT-Grundschutz Kompendium Edition 2024',
         'source_url':   'https://www.bsi.bund.de/dok/itgs',
         'control_count': None,
-        'note':         'Bundesamt für Sicherheit in der Informationstechnik. Modules SYS / OPS / NET / DER / CON / APP. PegaProx focuses on SYS.1.3 (general Linux server) and adjacent modules.',
+        'note':         'Bundesamt für Sicherheit in der Informationstechnik. Modules SYS / OPS / NET / DER / CON / APP. NosPanel focuses on SYS.1.3 (general Linux server) and adjacent modules.',
     },
     'vs-nfd': {
         'full_name':    'VS-NfD (Verschlusssache - Nur für den Dienstgebrauch)',
-        'revision':     'VS-Anweisung (VSA), based on BSI IT-Grundschutz; PegaProx adds 6 informational checks',
+        'revision':     'VS-Anweisung (VSA), based on BSI IT-Grundschutz; NosPanel adds 6 informational checks',
         'source_url':   'https://www.bsi.bund.de/EN/Themen/ZertifizierungundAnerkennung/Produktzertifizierung/Zertifizierung-und-Anerkennung-VS/zertifizierung-und-anerkennung-vs_node.html',
         'control_count': None,
-        'note':         'German national restricted-use classification. PegaProx provides a Proxmox-safe BSI Grundschutz subset + 6 VS-NfD-specific informational checks.',
+        'note':         'German national restricted-use classification. NosPanel provides a Proxmox-safe BSI Grundschutz subset + 6 VS-NfD-specific informational checks.',
     },
     'dr': {
         'full_name':    'Diffusion Restreinte (II 901)',
         'revision':     'Instruction interministérielle n° 901; technical Linux baseline = ANSSI-BP-028 v2.0 (2022-10-03)',
         'source_url':   'https://cyber.gouv.fr/publications/recommandations-de-securite-relatives-un-systeme-gnulinux',
         'control_count': None,
-        'note':         'French national restricted classification. II 901 sets the protection regime for DR-level information systems; PegaProx maps the technical Linux-hardening measures to ANSSI-BP-028 (the recognised French baseline). Audit-prep evidence — not a homologation.',
+        'note':         'French national restricted classification. II 901 sets the protection regime for DR-level information systems; NosPanel maps the technical Linux-hardening measures to ANSSI-BP-028 (the recognised French baseline). Audit-prep evidence — not a homologation.',
     },
     'rgs': {
         'full_name':    'RGS (Référentiel Général de Sécurité)',
         'revision':     'RGS v2.0; Linux-hardening implementation reference = ANSSI-BP-028 v2.0 (2022-10-03)',
         'source_url':   'https://cyber.gouv.fr/le-referentiel-general-de-securite-rgs-version-20',
         'control_count': None,
-        'note':         'French general security framework for administrations. RGS points to ANSSI technical guides for implementation; PegaProx maps the Linux node-hardening subset to ANSSI-BP-028. Technical-config evidence only.',
+        'note':         'French general security framework for administrations. RGS points to ANSSI technical guides for implementation; NosPanel maps the Linux node-hardening subset to ANSSI-BP-028. Technical-config evidence only.',
     },
 }
 
@@ -1325,8 +1325,8 @@ GLOSSARY = {
     'NX':          'No-eXecute — CPU-enforced memory protection bit that prevents code execution in data pages.',
     'TPM':         'Trusted Platform Module — hardware crypto chip used for measured boot, key sealing and secure storage of credentials.',
     'yescrypt':    'Modern password-hashing function (replaces SHA-512 crypt); designed to be hard to crack on GPUs/ASICs.',
-    'PVE':         'Proxmox Virtual Environment — the open-source hypervisor management platform PegaProx orchestrates.',
-    'PegaProx':    'The multi-cluster Proxmox VE / XCP-ng management platform that produced this report.',
+    'PVE':         'Proxmox Virtual Environment — the open-source hypervisor management platform NosPanel orchestrates.',
+    'NosPanel':    'The multi-cluster Proxmox VE / XCP-ng management platform that produced this report.',
     'SUID':        'Set User ID — a special permission bit that runs an executable with the privileges of its owner instead of the calling user.',
     'fail2ban':    'Log-based brute-force protection — bans IPs that exceed a failed-login threshold via firewall rules.',
     'KEX':         'Key Exchange algorithm — the SSH protocol step where client and server agree on a shared session key.',
@@ -1357,7 +1357,7 @@ GLOSSARY = {
 # ──────────────────────────────────────────────────────────────────────────
 METHODOLOGY = {
     'overview': (
-        'PegaProx executes deterministic checks over SSH against each in-scope '
+        'NosPanel executes deterministic checks over SSH against each in-scope '
         'cluster node and compares the observed configuration against the expected '
         'value defined by the selected hardening profile. Each check has a '
         'documented "check command" and an expected output; deviations are recorded '
@@ -1365,15 +1365,15 @@ METHODOLOGY = {
         'evaluated on every report run.'
     ),
     'procedures': [
-        ('Inquiry',         'PegaProx reads the configured hardening profile (e.g. "CMMC L2") and resolves it to a list of internal control checks via FRAMEWORK_MAPPING.'),
-        ('Inspection',      'PegaProx connects to each node via SSH and inspects configuration files, runtime kernel parameters, service status and file permissions.'),
-        ('Re-performance',  'PegaProx executes the documented check command on each node and verifies the actual output matches the expected value.'),
-        ('Evidence capture','When verbose mode is enabled, PegaProx records the exact check command and the actual node output for each control, included in Appendix C.'),
+        ('Inquiry',         'NosPanel reads the configured hardening profile (e.g. "CMMC L2") and resolves it to a list of internal control checks via FRAMEWORK_MAPPING.'),
+        ('Inspection',      'NosPanel connects to each node via SSH and inspects configuration files, runtime kernel parameters, service status and file permissions.'),
+        ('Re-performance',  'NosPanel executes the documented check command on each node and verifies the actual output matches the expected value.'),
+        ('Evidence capture','When verbose mode is enabled, NosPanel records the exact check command and the actual node output for each control, included in Appendix C.'),
     ],
     'sampling': '100% of in-scope cluster nodes evaluated. No statistical sampling applied. SSH unreachable nodes are reported as "not evaluated" rather than passed or failed.',
     'criteria': 'Mappings between internal checks and framework control IDs are maintained in pegaprox/core/compliance_mapping.py. Mappings should be re-verified against the current revision of the applicable framework before the report is used as input to a formal audit.',
     'limitations': (
-        'PegaProx assesses technical configuration only. The following are out of scope and must be evaluated separately by a qualified auditor: '
+        'NosPanel assesses technical configuration only. The following are out of scope and must be evaluated separately by a qualified auditor: '
         '(1) administrative policies and procedures, '
         '(2) personnel security and awareness training, '
         '(3) physical security of the data centre, '
@@ -1397,7 +1397,7 @@ def remediation_for(internal_id):
     """Return remediation hint dict, or a stub if not present."""
     return REMEDIATION.get(internal_id, {
         'summary': f'No prescribed remediation for {internal_id}.',
-        'how_to_fix': 'Consult PegaProx Hardening tool for the apply command, or the relevant CIS / STIG benchmark.',
+        'how_to_fix': 'Consult NosPanel Hardening tool for the apply command, or the relevant CIS / STIG benchmark.',
     })
 
 

@@ -60,7 +60,7 @@ def main(argv: List[str]) -> int:
     """Entry point.  Returns process exit code."""
     import argparse
     p = argparse.ArgumentParser(prog='pegaprox migrate-db',
-                                description='Migrate the PegaProx DB to SQLCipher encryption.')
+                                description='Migrate the NosPanel DB to SQLCipher encryption.')
     p.add_argument('--db', help='Path to pegaprox.db (default: from constants)')
     p.add_argument('--dry-run', action='store_true', help='Detect + print plan, do not modify')
     p.add_argument('--yes', action='store_true', help='Skip the confirmation prompt')
@@ -73,7 +73,7 @@ def main(argv: List[str]) -> int:
     from pegaprox.constants import CONFIG_DIR
     db_path = args.db or os.path.join(CONFIG_DIR, 'pegaprox.db')
 
-    print(f"── PegaProx DB migration ──")
+    print(f"── NosPanel DB migration ──")
     print(f"target: {db_path}")
 
     # Detect backend availability
@@ -174,7 +174,7 @@ def main(argv: List[str]) -> int:
     print(f"  Backend:         {dbcrypto.BACKEND}")
     print(f"  Cipher:          AES-256-CBC + HMAC-SHA512 (SQLCipher 4)")
     print(f"\nNext steps:")
-    print(f"  • Restart PegaProx so connections pick up the encrypted DB.")
+    print(f"  • Restart NosPanel so connections pick up the encrypted DB.")
     print(f"  • Verify functionality for a day or two.")
     print(f"  • Then:  shred -u {backup_path}")
     print(f"           (or rotate it into a secure offline archive)")

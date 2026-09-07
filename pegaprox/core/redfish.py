@@ -18,7 +18,7 @@ SAFETY:
     is_safe_outbound_url guard used elsewhere. allow_private=True because BMCs
     live on private management LANs, but _validate_host then re-rejects loopback,
     the unspecified/hub address, link-local and metadata explicitly so the
-    stored credential can't be aimed back at the PegaProx host. Rejections carry
+    stored credential can't be aimed back at the NosPanel host. Rejections carry
     a generic reason (no resolved-IP oracle). Redirects are refused so a hostile
     BMC can't bounce us onto an internal target.
   * Never raises into the caller — any failure returns {'available': False,
@@ -215,7 +215,7 @@ def _host_is_forbidden_target(hostname):
     EVEN on a private management LAN. allow_private=True (below) deliberately
     permits RFC1918 because BMCs live there, but that must not re-open loopback,
     the unspecified/hub address, or link-local — those let an admin.settings
-    holder point the stored-credential GET back at the PegaProx host itself or
+    holder point the stored-credential GET back at the NosPanel host itself or
     at a metadata endpoint. Returns True (forbidden) on any resolution failure —
     better to reject than to send a credential blind."""
     literal = hostname

@@ -1,5 +1,5 @@
 """
-Master-key loader for PegaProx.
+Master-key loader for NosPanel.
 
 Resolves the AES-256 master key from the most-secure available source.
 Order of precedence (highest first):

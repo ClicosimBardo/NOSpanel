@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Plugin Management API - Layer 6
+NosPanel Plugin Management API - Layer 6
 NS: Mar 2026 - auto-discover plugins from plugins/ dir, enable/disable via Settings
 
 Plugins register route handlers via register_plugin_route() which are dispatched
@@ -171,7 +171,7 @@ def load_plugin(app, plugin_id):
         try:
             with open(manifest_path) as f:
                 manifest = json.load(f)
-            is_trusted = manifest.get('author', '').startswith('PegaProx')
+            is_trusted = manifest.get('author', '').startswith('NosPanel')
         except Exception:
             pass
     if not is_trusted:
@@ -328,7 +328,7 @@ def list_plugins():
             'error': state.get('error', '') or plugin.get('error', ''),
             'has_init': plugin.get('_has_init', False),
             'routes': routes_snapshot.get(pid, []),
-            'trusted': plugin.get('author', '').startswith('PegaProx'),
+            'trusted': plugin.get('author', '').startswith('NosPanel'),
             'has_frontend': has_frontend,
             'frontend_route': frontend_route,
         })

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Alert Monitoring - Layer 7
+NosPanel Alert Monitoring - Layer 7
 Background alert checking and notification.
 """
 
@@ -416,7 +416,7 @@ def check_and_send_alerts():
         if triggered:
             # Send alert
             alert_name = alert.get('name', f'{metric} Alert')
-            subject = f"[PegaProx Alert] {alert_name}"
+            subject = f"[NosPanel Alert] {alert_name}"
             body = f"""
 Alert: {alert_name}
 Target: {target_type.capitalize()} - {target_name}
@@ -426,7 +426,7 @@ Current Value: {_val_display}
 Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 Cluster: {cluster_id}
 
-This is an automated alert from PegaProx.
+This is an automated alert from NosPanel.
 """
             # MK May 2026 - escape user-controlled strings in the HTML email
             # (alert_name + target_name come from user-defined alert rules, target_type
@@ -434,7 +434,7 @@ This is an automated alert from PegaProx.
             # threshold are floats so format-spec coercion already kills any payload.
             _e = html_lib.escape
             html_body = f"""
-<h2 style="color: #e74c3c;">⚠️ PegaProx Alert: {_e(str(alert_name))}</h2>
+<h2 style="color: #e74c3c;">⚠️ NosPanel Alert: {_e(str(alert_name))}</h2>
 <table style="border-collapse: collapse; width: 100%; max-width: 500px;">
 <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Target</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{_e(str(target_type).capitalize())} - {_e(str(target_name))}</td></tr>
 <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Metric</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{_e(str(metric).upper())}</td></tr>
@@ -442,7 +442,7 @@ This is an automated alert from PegaProx.
 <tr style="background-color: #fee2e2;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Current Value</strong></td><td style="padding: 8px; border: 1px solid #ddd;"><strong>{_val_display}</strong></td></tr>
 <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Time</strong></td><td style="padding: 8px; border: 1px solid #ddd;">{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</td></tr>
 </table>
-<p style="color: #666; font-size: 12px; margin-top: 20px;">This is an automated alert from PegaProx.</p>
+<p style="color: #666; font-size: 12px; margin-top: 20px;">This is an automated alert from NosPanel.</p>
 """
             
             # NS Apr 2026 (#213) — honour the per-rule channel selection.
@@ -621,9 +621,9 @@ def check_update_available_alert():
     # compose + send
     release_date = remote.get('release_date') or ''
     changelog = remote.get('changelog', []) or []
-    subject = f"[PegaProx] Update available — {latest}"
+    subject = f"[NosPanel] Update available — {latest}"
     body_lines = [
-        f"A new PegaProx release is available: {latest}",
+        f"A new NosPanel release is available: {latest}",
         f"Current version: {PEGAPROX_VERSION}",
         f"Released: {release_date}" if release_date else '',
         '',
@@ -638,7 +638,7 @@ def check_update_available_alert():
     download_url = remote.get('download_url', '')
     html_items = ''.join(f"<li>{html_lib.escape(str(c))}</li>" for c in changelog[:10])
     html_body = (
-        f"<h2>PegaProx update available</h2>"
+        f"<h2>NosPanel update available</h2>"
         f"<p>A new release <b>{html_lib.escape(str(latest))}</b> is available.</p>"
         f"<p>Current: <code>{html_lib.escape(PEGAPROX_VERSION)}</code>"
         + (f" · Released: {html_lib.escape(str(release_date))}" if release_date else '') + "</p>"
@@ -739,7 +739,7 @@ def _emit_node_status_event(cluster_id, node, new_status, message, severity, rec
 
     if recipients:
         try:
-            subject = f"[PegaProx] {alert_data['alert_name']}"
+            subject = f"[NosPanel] {alert_data['alert_name']}"
             body = f"{message}\n\nCluster: {cluster_id}\nNode: {node}\nTime: {alert_data['timestamp']}\n"
             # MK May 2026 - alert_data['alert_name'] is user-defined; message comes
             # from the watcher (mostly safe) but cluster_id can be free-form. Escape

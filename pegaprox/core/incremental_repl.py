@@ -8,13 +8,13 @@ FULL clone + remote-migrate of the whole disk every cycle — correct for any
 storage, but it re-ships every byte, so it does not scale to big VMs. For RBD
 and ZFS we can instead ship only the delta between two snapshots.
 
-Data path — PegaProx byte-relay (no direct node-to-node link required):
-PegaProx already holds SSH to both clusters, so it runs the exporter on a source
+Data path — NosPanel byte-relay (no direct node-to-node link required):
+NosPanel already holds SSH to both clusters, so it runs the exporter on a source
 node, the importer on a target node, and relays the bytes between the two SSH
 channels itself. This avoids assuming the source node can reach the target node
 directly (pve-zsync's model), which rarely holds across separate clusters/sites.
 
-    source node                PegaProx                 target node
+    source node                NosPanel                 target node
     rbd export-diff  --stdout-->  relay  --stdin-->  rbd import-diff
 
 This module is storage-primitive only: it moves one disk's delta and manages the

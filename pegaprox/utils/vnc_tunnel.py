@@ -1,14 +1,14 @@
-"""SSH-tunneled local port forwarder for the PegaProx ↔ PVE-node VNC leg.
+"""SSH-tunneled local port forwarder for the NosPanel ↔ PVE-node VNC leg.
 
 When TLS-inspection middleboxes (CrowdStrike Falcon NF, Palo Alto SSL Decryption,
-Zscaler, Forcepoint, …) sit between PegaProx and the PVE node, they re-encrypt
+Zscaler, Forcepoint, …) sit between NosPanel and the PVE node, they re-encrypt
 the WSS-to-PVE TLS and modify binary RFB bytes mid-stream — destroying the
 DES challenge-response. This is what produces the textbook "recv=60B + ttfb
 high" pattern with QEMU returning 'Authentication failed'.
 
 This module wraps that leg in an SSH transport. SSH is host-key-pinned per
 session, so inspection engines don't decrypt it (they don't have the trust
-anchor). The PegaProx daemon spawns a single persistent SSH client per PVE
+anchor). The NosPanel daemon spawns a single persistent SSH client per PVE
 node, then opens an ephemeral local TCP listener per VNC session that pipes
 bytes through a `direct-tcpip` SSH channel to pve:8006. The VNC subprocess
 then connects to `wss://127.0.0.1:<EPHEMERAL>/...` instead of `wss://pve:8006`.
@@ -19,7 +19,7 @@ per session). On transport drop, the next acquire() reconnects.
 
 MK Apr 2026 — driven by customer report where Stable VNC Mode (browser-side
 encryption) wasn't enough because their inspection-engine sat on the
-PegaProx↔PVE side too.
+NosPanel↔PVE side too.
 """
 import os
 import select

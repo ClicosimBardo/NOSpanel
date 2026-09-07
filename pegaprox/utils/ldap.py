@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx LDAP Authentication - Layer 4
+NosPanel LDAP Authentication - Layer 4
 """
 
 import json
@@ -232,7 +232,7 @@ def ldap_authenticate(username: str, password: str) -> dict:
             except Exception as e:
                 logging.warning(f"[LDAP] Group search failed: {e}")
         
-        # Step 5: Map LDAP groups to PegaProx roles
+        # Step 5: Map LDAP groups to NosPanel roles
         role = ldap_config['default_role']
         tenant = None
         extra_permissions = []

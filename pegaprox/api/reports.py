@@ -735,7 +735,7 @@ def apply_hardening(cluster_id, node):
 
     # #16745 — self-lockout guard (belt-and-suspenders behind the UI ack). sshd_hardening sets
     # PermitRootLogin=prohibit-password; on a cluster we reach as root by password with no SSH
-    # key, that severs PegaProx's own access to the node — and rollback needs SSH too. Refuse it
+    # key, that severs NosPanel's own access to the node — and rollback needs SSH too. Refuse it
     # unless the caller explicitly forces (the UI does, after a checked acknowledgement).
     mgr_has_key = bool(getattr(mgr.config, 'ssh_key', ''))
     blocked = {}
@@ -744,7 +744,7 @@ def apply_hardening(cluster_id, node):
         blocked['sshd_hardening'] = {
             'success': False, 'blocked': True,
             'error': 'Blocked: SSH Access Hardening disables root password login and would cut off '
-                     'PegaProx access to this cluster (no SSH key is configured). Add an SSH key to '
+                     'NosPanel access to this cluster (no SSH key is configured). Add an SSH key to '
                      'the cluster first, or re-apply with force to override.'
         }
 

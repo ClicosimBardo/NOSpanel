@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Realtime API Routes - Layer 6
+NosPanel Realtime API Routes - Layer 6
 WebSocket, SSE, and email test endpoints.
 """
 
@@ -290,7 +290,7 @@ def validate_ws_token_api():
                         # NS Aug 2026 (AI-pentest) — carry the per-cluster TLS-verify flag to the
                         # termproxy WS subprocess. Without it the consumer defaults verify_pve_tls to
                         # False and pins CERT_NONE even when the admin enabled ssl_verification, so a
-                        # MitM between PegaProx and PVE could intercept the console + its auth ticket.
+                        # MitM between NosPanel and PVE could intercept the console + its auth ticket.
                         'verify_pve_tls': bool(getattr(mgr, '_ssl_verify', False)),
                     }
                     # NS 2026-06-05 (C-1): hand the PVE session cookie to the WS
@@ -523,7 +523,7 @@ def test_smtp():
             'smtp_user': data.get('smtp_user', ''),
             'smtp_password': real_password,
             'smtp_from_email': data.get('smtp_from_email', ''),
-            'smtp_from_name': data.get('smtp_from_name', 'PegaProx'),
+            'smtp_from_name': data.get('smtp_from_name', 'NosPanel'),
             'smtp_tls': data.get('smtp_tls', True),
             'smtp_ssl': data.get('smtp_ssl', False),
         }
@@ -541,9 +541,9 @@ def test_smtp():
     # Send test email using the same function as alerts
     success, error = send_email(
         to_addresses=[test_email],
-        subject='PegaProx Test Email',
-        body='This is a test email from PegaProx to verify your SMTP settings are working correctly.',
-        html_body='<h2>PegaProx Test Email</h2><p>This is a test email to verify your SMTP settings.</p><p style="color: green;">Your SMTP configuration is working!</p>',
+        subject='NosPanel Test Email',
+        body='This is a test email from NosPanel to verify your SMTP settings are working correctly.',
+        html_body='<h2>NosPanel Test Email</h2><p>This is a test email to verify your SMTP settings.</p><p style="color: green;">Your SMTP configuration is working!</p>',
         smtp_settings=smtp_settings
     )
 

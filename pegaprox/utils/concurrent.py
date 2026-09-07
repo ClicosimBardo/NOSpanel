@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Concurrency Helpers - Layer 2
+NosPanel Concurrency Helpers - Layer 2
 """
 
 import os

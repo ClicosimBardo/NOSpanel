@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Password Expiry Check - Layer 7
+NosPanel Password Expiry Check - Layer 7
 Background password expiry monitoring.
 """
 
@@ -105,55 +105,55 @@ def check_password_expiry():
             display_name = user.get('display_name', username)
             
             if days_until_expiry <= 0:
-                subject = f"[PegaProx] Password expired / Passwort abgelaufen"
+                subject = f"[NosPanel] Password expired / Passwort abgelaufen"
                 body = f"""Hello {display_name},
 
-Your PegaProx password has expired. Please change it as soon as possible.
+Your NosPanel password has expired. Please change it as soon as possible.
 
 You can still log in, but you will be prompted to change your password.
 
 Username: {username}
 
 Best regards,
-Your PegaProx System
+Your NosPanel System
 
 ---
 
 Hallo {display_name},
 
-Ihr PegaProx-Passwort ist abgelaufen. Bitte ändern Sie es so bald wie möglich.
+Ihr NosPanel-Passwort ist abgelaufen. Bitte ändern Sie es so bald wie möglich.
 
 Sie können sich weiterhin anmelden, werden aber aufgefordert Ihr Passwort zu ändern.
 
 Benutzername: {username}
 
 Mit freundlichen Grüßen,
-Ihr PegaProx System"""
+Ihr NosPanel System"""
             else:
-                subject = f"[PegaProx] Password expires in {days_until_expiry} days / Passwort läuft ab"
+                subject = f"[NosPanel] Password expires in {days_until_expiry} days / Passwort läuft ab"
                 body = f"""Hello {display_name},
 
-Your PegaProx password will expire in {days_until_expiry} days.
+Your NosPanel password will expire in {days_until_expiry} days.
 
 Please change your password in time to avoid any interruptions.
 
 Username: {username}
 
 Best regards,
-Your PegaProx System
+Your NosPanel System
 
 ---
 
 Hallo {display_name},
 
-Ihr PegaProx-Passwort läuft in {days_until_expiry} Tagen ab.
+Ihr NosPanel-Passwort läuft in {days_until_expiry} Tagen ab.
 
 Bitte ändern Sie Ihr Passwort rechtzeitig um Unterbrechungen zu vermeiden.
 
 Benutzername: {username}
 
 Mit freundlichen Grüßen,
-Ihr PegaProx System"""
+Ihr NosPanel System"""
             
             success, error = send_email([email], subject, body)
             if success:

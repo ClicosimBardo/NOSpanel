@@ -586,7 +586,7 @@ def _get_xcpng_targets(xcpng_mgr):
 # ============================================================
 
 def _run_xcpng_to_pve(task):
-    """XCP-ng -> Proxmox: export raw VDI, stream via PegaProx, qm importdisk on target.
+    """XCP-ng -> Proxmox: export raw VDI, stream via NosPanel, qm importdisk on target.
 
     NS: this is the "easy" direction because XCP-ng has a clean HTTP export_raw_vdi
     endpoint and Proxmox qm importdisk handles format conversion.
@@ -1218,7 +1218,7 @@ def _run_pve_to_xcpng(task):
 
             task.log(f"  Created VDI {new_vdi_uuid}")
 
-            # SSH into PVE, stream disk -> PegaProx -> HTTP PUT to XCP-ng
+            # SSH into PVE, stream disk -> NosPanel -> HTTP PUT to XCP-ng
             try:
                 pve_user = getattr(src_mgr.config, 'ssh_user', '') or 'root'
                 pve_pass = getattr(src_mgr.config, 'pass_', '')
@@ -1395,7 +1395,7 @@ def _run_pve_to_xcpng(task):
 
             # set properties
             xapi.VM.set_name_description(new_vm_ref,
-                f'Migrated from Proxmox (VMID {task.source_vmid}) by PegaProx')
+                f'Migrated from Proxmox (VMID {task.source_vmid}) by NosPanel')
             xapi.VM.set_VCPUs_max(new_vm_ref, str(vcpus))
             xapi.VM.set_VCPUs_at_startup(new_vm_ref, str(vcpus))
 
@@ -2108,11 +2108,11 @@ def _run_esxi_to_pve(task):
 
 
 def _run_esxi_to_xcpng(task):
-    """ESXi -> XCP-ng: SSHFS mount on PegaProx host, qemu-img convert VMDK to raw,
+    """ESXi -> XCP-ng: SSHFS mount on NosPanel host, qemu-img convert VMDK to raw,
     stream to XCP-ng import_raw_vdi.
 
-    MK: needs qemu-img on the machine running PegaProx (or on the XCP-ng host).
-    Uses PegaProx server as relay since ESXi can't do qemu-img and XCP-ng
+    MK: needs qemu-img on the machine running NosPanel (or on the XCP-ng host).
+    Uses NosPanel server as relay since ESXi can't do qemu-img and XCP-ng
     can't mount ESXi datastores directly.
     """
     import requests as _req
@@ -2232,7 +2232,7 @@ def _run_esxi_to_xcpng(task):
                 return
             task.log(f"  Created VDI {new_vdi_uuid}")
 
-            # strategy: SCP flat vmdk to /tmp on PegaProx, then qemu-img convert | HTTP PUT
+            # strategy: SCP flat vmdk to /tmp on NosPanel, then qemu-img convert | HTTP PUT
             # this uses local temp space but avoids SSHFS complexity
             tmp_vmdk = f"/tmp/xhm-esxi-{task.id}-{idx}-flat.vmdk"
             tmp_raw = f"/tmp/xhm-esxi-{task.id}-{idx}.raw"

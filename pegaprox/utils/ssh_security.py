@@ -1,8 +1,8 @@
-"""Central SSH host-key verification for every paramiko connection PegaProx makes.
+"""Central SSH host-key verification for every paramiko connection NosPanel makes.
 
 Background
 ----------
-PegaProx connects over SSH to a fleet of hosts (PVE nodes, PBS, ESXi, XCP-ng,
+NosPanel connects over SSH to a fleet of hosts (PVE nodes, PBS, ESXi, XCP-ng,
 storage boxes) whose host keys are not provisioned ahead of time. The historical
 code used ``paramiko.AutoAddPolicy`` / ``WarningPolicy``, which accept an unknown
 host key silently — flagged as a critical MitM exposure (an attacker sitting
@@ -156,7 +156,7 @@ def _known_hosts_token_host(tok):
 def remove_host_keys(hostnames):
     """Drop known_hosts entries for the given hosts/IPs.
 
-    Call this when a cluster or node is REMOVED from PegaProx so that re-adding it
+    Call this when a cluster or node is REMOVED from NosPanel so that re-adding it
     later works cleanly: if the box was reinstalled in the meantime it presents a
     new host key, and without this the stale pinned key would trip reject-on-change
     and block the reconnect. Text-based (handles ``host``, ``h1,h2`` and

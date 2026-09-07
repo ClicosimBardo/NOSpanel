@@ -69,7 +69,7 @@ def _b64url_decode(s: str) -> bytes:
     return base64.urlsafe_b64decode(s + pad)
 
 def _current_user():
-    """Return the logged-in username string. PegaProx stores user in
+    """Return the logged-in username string. NosPanel stores user in
     request.session (populated by @require_auth), NOT Flask's flask.session."""
     try:
         u = request.session.get('user') if hasattr(request, 'session') else ''
@@ -340,7 +340,7 @@ def _alert_handler(alert_data: dict):
     *all* admin users (since alerts aren't user-scoped today) and sends
     a wake-up push to every registered subscription."""
     try:
-        title = alert_data.get('alert_name') or 'PegaProx Alert'
+        title = alert_data.get('alert_name') or 'NosPanel Alert'
         body = alert_data.get('message') or ''
         sev = alert_data.get('severity', 'info')
         cid = alert_data.get('cluster_id', '')
@@ -547,7 +547,7 @@ def send_test():
     if not user:
         return jsonify({'error': 'session missing'}), 401
     _push_to_inbox(user,
-                   'PegaProx — Test Push',
+                   'NosPanel — Test Push',
                    'If you see this, browser notifications are working.',
                    'info', '/', 'test-push')
     _wake_user(user)

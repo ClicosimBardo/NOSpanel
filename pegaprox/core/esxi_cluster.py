@@ -24,7 +24,7 @@ class _ESXiConfig:
 
 
 class ESXiClusterManager:
-    """Makes an ESXi host look like a PegaProx cluster for XHM.
+    """Makes an ESXi host look like a NosPanel cluster for XHM.
     Delegates everything to the underlying VMwareManager."""
 
     cluster_type = 'esxi'

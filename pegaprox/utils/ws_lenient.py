@@ -13,9 +13,9 @@ We've seen this happen in two production patterns:
 
 1. **TLS-inspection / EDR proxies** that re-write the Connection header before
    passing the upgrade through.
-2. **Proxmox VE 9.1.8-9.1.9 hosts** running PegaProx co-located on the PVE
+2. **Proxmox VE 9.1.8-9.1.9 hosts** running NosPanel co-located on the PVE
    node. The PVE-side traffic-handling stack started normalising Connection
-   headers in a way that drops the `Upgrade` token. Reported as PegaProx
+   headers in a way that drops the `Upgrade` token. Reported as NosPanel
    GitHub issue #352 by multiple users on different OSes (no AV in common),
    pinpointed by user `eugen-optimus` to PVE 9.1.8-9.1.9 specifically.
 

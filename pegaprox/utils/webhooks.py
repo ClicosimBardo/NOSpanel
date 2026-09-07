@@ -98,7 +98,7 @@ def _ntfy_priority(sev):
 
 
 def _build_slack(alert):
-    title = alert.get('alert_name') or 'PegaProx alert'
+    title = alert.get('alert_name') or 'NosPanel alert'
     message = alert.get('message', '')
     color = _severity_color(alert.get('severity'))
     return {
@@ -112,14 +112,14 @@ def _build_slack(alert):
                 {'title': 'Metric', 'value': f"{alert.get('metric', '')} = {alert.get('current_value', '')}", 'short': True},
                 {'title': 'Cluster', 'value': alert.get('cluster_id', '-'), 'short': True},
             ],
-            'footer': 'PegaProx',
+            'footer': 'NosPanel',
             'ts': int(datetime.now().timestamp()),
         }]
     }
 
 
 def _build_discord(alert):
-    title = alert.get('alert_name') or 'PegaProx alert'
+    title = alert.get('alert_name') or 'NosPanel alert'
     color_hex = _severity_color(alert.get('severity'))
     try:
         color_int = int(color_hex.lstrip('#'), 16)
@@ -135,7 +135,7 @@ def _build_discord(alert):
                 {'name': 'Target', 'value': f"{alert.get('target_type', '')}: {alert.get('target_name', '')}", 'inline': True},
                 {'name': 'Metric', 'value': f"{alert.get('metric', '')} = {alert.get('current_value', '')}", 'inline': True},
             ],
-            'footer': {'text': 'PegaProx'},
+            'footer': {'text': 'NosPanel'},
             'timestamp': datetime.now().isoformat(),
         }]
     }
@@ -144,7 +144,7 @@ def _build_discord(alert):
 def _build_teams(alert):
     # MS Teams MessageCard (legacy but still works everywhere). Adaptive Cards
     # need an auth-token dance that ops teams rarely bother with.
-    title = alert.get('alert_name') or 'PegaProx alert'
+    title = alert.get('alert_name') or 'NosPanel alert'
     return {
         '@type': 'MessageCard',
         '@context': 'http://schema.org/extensions',
@@ -172,7 +172,7 @@ def _post_ntfy(channel, alert):
     if topic:
         url = f"{url}/{topic}"
     headers = {
-        'Title': (alert.get('alert_name') or 'PegaProx alert')[:200],
+        'Title': (alert.get('alert_name') or 'NosPanel alert')[:200],
         'Priority': str(_ntfy_priority(alert.get('severity'))),
         'Tags': alert.get('severity', 'info'),
     }

@@ -3564,7 +3564,7 @@ def vm_action_api(cluster_id, node, vm_type, vmid, action):
         # NS: Push immediate resource update for faster UI feedback
         push_immediate_update(cluster_id, delay=0.5)
 
-        # NS: Register which PegaProx user initiated this task
+        # NS: Register which NosPanel user initiated this task
         upid = result.get('data')
         if upid:
             register_task_user(upid, usr, cluster_id)
@@ -3661,7 +3661,7 @@ def clone_vm_api(cluster_id, node, vm_type, vmid):
         user = getattr(request, 'session', {}).get('user', 'system')
         log_audit(user, 'vm.cloned', f"{vm_type.upper()} {vmid} cloned to {newid}" + (f" as '{data.get('name')}'" if data.get('name') else ""), cluster=manager.config.name)
 
-        # NS: Register PegaProx user for this task
+        # NS: Register NosPanel user for this task
         upid = result.get('data')
         if upid:
             register_task_user(upid, user, cluster_id)
@@ -3705,7 +3705,7 @@ def get_console_ticket(cluster_id, node, vm_type, vmid):
         usr = request.session.get('user', 'unknown')
         log_audit(usr, 'vm.console', f'VNC console opened: {vm_type}/{vmid} on {node}', cluster=mgr.config.name)
 
-        # NS Jul 2026 — tag the vncproxy task with the PegaProx user who opened it,
+        # NS Jul 2026 — tag the vncproxy task with the NosPanel user who opened it,
         # so the taskbar shows YOUR user (not the shared PVE credential). Every other
         # task-creating action registers; the console path was the one that never did.
         if result.get('upid'):
@@ -3950,7 +3950,7 @@ def get_vm_screenshot(cluster_id, node, vm_type, vmid):
 
 
 # MK Apr 2026 — HTTP-polling fallback for the VNC proxy. Used when the WS
-# leg between browser and PegaProx is killed by a security middlebox (rare
+# leg between browser and NosPanel is killed by a security middlebox (rare
 # but real: CrowdStrike with WS DPI on, Zscaler strict mode). Same auth, same
 # Stable-Mode crypto, same SSH tunnel for the second leg — only the transport
 # changes from "one persistent WSS" to "many short HTTPS POSTs". Higher latency,
@@ -4521,7 +4521,7 @@ def get_vm_guest_info_api(cluster_id, node, vm_type, vmid):
 
 
 # MK #334 — surface the guest agent's fsinfo so scripts can monitor mountpoint
-# usage without having to call both PegaProx + Proxmox. Returns [] + agent_running=False
+# usage without having to call both NosPanel + Proxmox. Returns [] + agent_running=False
 # when the agent isn't installed / the VM isn't running — callers treat it as "no data".
 @bp.route('/api/clusters/<cluster_id>/vms/<node>/<vm_type>/<int:vmid>/guest-fsinfo', methods=['GET'])
 @require_auth(perms=['vm.view'])
@@ -5347,7 +5347,7 @@ def move_disk_api(cluster_id, node, vm_type, vmid, disk_id):
         user = getattr(request, 'session', {}).get('user', 'system')
         log_audit(user, 'vm.disk_moved', f"{vm_type.upper()} {vmid} - disk {disk_id} moved to {target_storage}", cluster=manager.config.name)
         
-        # NS: Register PegaProx user for this task
+        # NS: Register NosPanel user for this task
         upid = result.get('task') or result.get('upid')
         if upid:
             register_task_user(upid, user, cluster_id)
@@ -6164,7 +6164,7 @@ def _resolve_vm_node(mgr, vmid, vm_type='qemu'):
 
 def _free_local_target_vmid(mgr, tgt_vmid, src_vmid, vm_type, target_node):
     """For a pinned local-replication target VMID: if a VM already sits on it,
-    remove it ONLY when it is EXACTLY this job's prior replica — the name PegaProx
+    remove it ONLY when it is EXACTLY this job's prior replica — the name NosPanel
     writes is `repl-<src>-<target_node>` (clone_label), so match that exactly rather
     than a loose prefix. Refuse to touch anything else so we never clobber an
     unrelated VM. Returns (ok, error_message). #552 (exact-match hardening sec-review)
@@ -6749,7 +6749,7 @@ def _build_incremental_replica_vm(target_mgr, target_node, tgt_vmid, src_cfg, re
 def _execute_replication_incremental(job):
     """#174 aderumier — incremental cross-cluster replication for a VM whose disks
     are ALL Ceph RBD on both source and target. Ships only the snapshot delta via
-    the PegaProx byte-relay (core/incremental_repl) instead of full-cloning +
+    the NosPanel byte-relay (core/incremental_repl) instead of full-cloning +
     remote-migrating the whole disk every cycle.
 
     Returns True if it handled the job (success OR a reported failure), or False
@@ -9041,11 +9041,11 @@ def vnc_websocket_proxy(ws, cluster_id, node, vm_type, vmid):
 
 # NS May 2026 — Proxmox built-in termproxy (xterm.js) for LXC + QEMU.
 # Same idea as the VNC proxy above but talks PVE's text-frame termproxy
-# protocol instead of RFB. No second login: the PegaProx session is
+# protocol instead of RFB. No second login: the NosPanel session is
 # already trusted to act as the cluster admin user, so we log into PVE
 # server-side, fetch the termproxy ticket, send the `user:ticket\n`
 # handshake to PVE on behalf of the browser, then bidirectionally proxy
-# bytes between the PegaProx client WS and the PVE WS.
+# bytes between the NosPanel client WS and the PVE WS.
 #
 # Wire protocol (verbatim from pve-xtermjs/src/www/main.js):
 #   client → PVE  (after auth):  "0:<len>:<data>"  (xterm input bytes)
@@ -9273,7 +9273,7 @@ async def ssh_handler(websocket):
 
         headers = {'X-Session-ID': session_id} if session_id else {}
         cookies = {'session': session_id} if session_id else {}
-        # nosec B501 — localhost-to-PegaProx (PEGAPROX_URL = 127.0.0.1:port) with our
+        # nosec B501 — localhost-to-NosPanel (PEGAPROX_URL = 127.0.0.1:port) with our
         # own self-signed cert. Same-host trust boundary; attacker with local
         # cert-read access already has more direct attack paths. MK 2026-06-04.
         r = requests.get(validate_url, cookies=cookies, headers=headers, timeout=8, verify=False)
@@ -9305,7 +9305,7 @@ async def ssh_handler(websocket):
         if not ws_token and session_id:
             try:
                 print(f"Fetching cluster creds from: {PEGAPROX_URL}/api/internal/cluster-creds/{cluster_id}")
-                # nosec B501 — same-host PegaProx self-signed cert, see MK 2026-06-04 audit
+                # nosec B501 — same-host NosPanel self-signed cert, see MK 2026-06-04 audit
                 rc = requests.get(f"{PEGAPROX_URL}/api/internal/cluster-creds/{cluster_id}",
                                   cookies={'session': session_id}, timeout=10, verify=False)
                 if rc.status_code == 200:
@@ -9337,7 +9337,7 @@ async def ssh_handler(websocket):
 
     # MK May 2026 (CodeAnt CWE-918) - build the SSH allow-list. prefetched_ip from
     # URL and user-supplied creds.host below must both be in this set; otherwise
-    # an authenticated user could turn PegaProx into an SSH jump host for any
+    # an authenticated user could turn NosPanel into an SSH jump host for any
     # internal IP. Set comes from server-side resolution only.
     allowed_hosts = set()
     if cluster_host:
@@ -9579,7 +9579,7 @@ async def termproxy_handler(client_ws, query, m_term, ws_token, session_id):
             validate_url = f"{PEGAPROX_URL}/api/auth/validate"
         headers = {'X-Session-ID': session_id} if session_id else {}
         cookies = {'session': session_id} if session_id else {}
-        # nosec B501 — localhost-to-PegaProx (PEGAPROX_URL = 127.0.0.1:port) with our
+        # nosec B501 — localhost-to-NosPanel (PEGAPROX_URL = 127.0.0.1:port) with our
         # own self-signed cert. Same-host trust boundary; attacker with local
         # cert-read access already has more direct attack paths. MK 2026-06-04.
         r = requests.get(validate_url, cookies=cookies, headers=headers, timeout=8, verify=False)
@@ -9640,7 +9640,7 @@ async def termproxy_handler(client_ws, query, m_term, ws_token, session_id):
     if not allowed_hosts and session_id:
         try:
             cr = requests.get(f"{PEGAPROX_URL}/api/internal/cluster-creds/{cluster_id}",
-                              cookies={'session': session_id}, timeout=10, verify=False)  # nosec B501 — localhost-to-PegaProx self-signed cert; same-host trust boundary, see MK 2026-06-04 audit
+                              cookies={'session': session_id}, timeout=10, verify=False)  # nosec B501 — localhost-to-NosPanel self-signed cert; same-host trust boundary, see MK 2026-06-04 audit
             if cr.status_code == 200:
                 cr_data = cr.json() or {}
                 if cr_data.get('host'):
@@ -10231,7 +10231,7 @@ def migrate_vm_api(cluster_id, node, vm_type, vmid):
                 details += " (online)"
             log_audit(user, 'vm.migrated', details, cluster=manager.config.name)
 
-            # NS: Register PegaProx user for this task
+            # NS: Register NosPanel user for this task
             upid = result.get('upid') or result.get('task') or result.get('data')
             if upid:
                 register_task_user(upid, user, cluster_id)
@@ -10274,7 +10274,7 @@ def delete_vm_api(cluster_id, node, vm_type, vmid):
         log_audit(usr, 'vm.deleted', f"{vm_type.upper()} {vmid} deleted from {node}" + (" (purged)" if purge else ""), cluster=manager.config.name)
         broadcast_action('delete', vm_type, str(vmid), {'node': node, 'purge': purge}, cluster_id, usr)
         
-        # NS: Register PegaProx user for this task
+        # NS: Register NosPanel user for this task
         upid = result.get('task') or result.get('upid') or result.get('data')
         if upid:
             register_task_user(upid, usr, cluster_id)
@@ -10349,7 +10349,7 @@ def bulk_migrate_api(cluster_id):
 
         result = mgr.migrate_vm_manual(vm['node'], vm['vmid'], vm['type'], target_node, online)
 
-        # NS: Register PegaProx user for each migration task
+        # NS: Register NosPanel user for each migration task
         if result.get('task') or result.get('upid'):
             register_task_user(result.get('task') or result.get('upid'), user, cluster_id)
 
@@ -10425,7 +10425,7 @@ def remote_migrate_vm_api(cluster_id, node, vm_type, vmid):
     )
     
     if result.get('success'):
-        # NS: Register PegaProx user for this task
+        # NS: Register NosPanel user for this task
         user = getattr(request, 'session', {}).get('user', 'system')
         upid = result.get('task') or result.get('upid')
         if upid:
@@ -10601,7 +10601,7 @@ def cross_cluster_migrate_api():
                 request.remote_addr
             )
             
-            # NS: Register PegaProx user for this task
+            # NS: Register NosPanel user for this task
             task_upid = result.get('task')
             if task_upid:
                 register_task_user(task_upid, user, source_cluster_id)
@@ -10704,7 +10704,7 @@ def cross_cluster_migrate_api():
             
             # MK: Add helpful hint for 401 errors
             if '401' in error_msg or 'Unauthorized' in error_msg or 'Broken pipe' in error_msg:
-                error_msg += ". If this persists, check PegaProx version (token cleanup timing was fixed in 0.6.2)"
+                error_msg += ". If this persists, check NosPanel version (token cleanup timing was fixed in 0.6.2)"
             
             target_manager.delete_api_token(token_name)
             return jsonify({'error': error_msg}), 500

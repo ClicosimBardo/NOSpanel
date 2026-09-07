@@ -2,7 +2,7 @@
 """
 Cloud-Init Template Library — NS May 2026.
 
-Curated catalog of common cloud images. PegaProx automates the standard
+Curated catalog of common cloud images. NosPanel automates the standard
 "download → import → cloud-init drive → convert to template" workflow so
 admins don't have to ssh into every node and run pvesm/qm by hand.
 
@@ -188,7 +188,7 @@ def _lookup_template(template_id):
 
 
 def _current_user():
-    """Return the logged-in username string. PegaProx stores the username
+    """Return the logged-in username string. NosPanel stores the username
     directly in request.session['user'] (not a dict like default Flask)."""
     try:
         u = request.session.get('user') if hasattr(request, 'session') else ''

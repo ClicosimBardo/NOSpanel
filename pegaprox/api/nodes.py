@@ -591,7 +591,7 @@ def get_cluster_hardware_health_api(cluster_id):
 # MUTATES the node (package + IPMI kernel modules) so it must not run before the
 # warning is acknowledged. admin.settings + audited + idempotent + bounded-parallel.
 IPMITOOL_INSTALL_SCRIPT = """#!/usr/bin/env bash
-# PegaProx (#609) — install ipmitool for in-band hardware monitoring on this node.
+# NosPanel (#609) — install ipmitool for in-band hardware monitoring on this node.
 set -uo pipefail
 if command -v ipmitool >/dev/null 2>&1; then
     ver="$(ipmitool -V 2>/dev/null | head -1 || echo ipmitool)"
@@ -1263,7 +1263,7 @@ def _ssh_write_file(ssh, path, content, mode=None):
 SMBIOS_SCRIPT_TEMPLATE = '''#!/usr/bin/env python3
 """
 SMBIOS Auto-Configurator for Proxmox VE
-Deployed by PegaProx - automatically configures SMBIOS for new VMs
+Deployed by NosPanel - automatically configures SMBIOS for new VMs
 
 Runs as a systemd service, monitors for new VMs and sets SMBIOS data.
 """
@@ -1274,7 +1274,7 @@ import os
 import random
 from datetime import datetime
 
-# Configuration - set by PegaProx when deployed
+# Configuration - set by NosPanel when deployed
 MANUFACTURER = "{manufacturer}"
 PRODUCT = "{product}"
 VERSION = "{version}"
@@ -1415,7 +1415,7 @@ def cleanup_processed_list(processed):
     return processed
 
 def main():
-    log_message("=== PegaProx SMBIOS Auto-Configurator started ===")
+    log_message("=== NosPanel SMBIOS Auto-Configurator started ===")
     log_message(f"Config: {{MANUFACTURER}} | {{PRODUCT}} | {{VERSION}} | {{FAMILY}}")
     
     processed = load_processed_vms()
@@ -1460,7 +1460,7 @@ if __name__ == "__main__":
 '''
 
 SMBIOS_SERVICE_TEMPLATE = '''[Unit]
-Description=PegaProx SMBIOS Auto-Configurator
+Description=NosPanel SMBIOS Auto-Configurator
 After=pve-cluster.service
 Wants=pve-cluster.service
 
@@ -1992,7 +1992,7 @@ def _safe_repo_url(u, default):
     return u
 
 STARLVM_INSTALL_SCRIPT = """#!/usr/bin/env bash
-# PegaProx — install the StarWind x Proxmox SAN plugin (starlvm) on this node.
+# NosPanel — install the StarWind x Proxmox SAN plugin (starlvm) on this node.
 set -uo pipefail
 REPO_URL='__REPO_URL__'
 KEY_URL='__KEY_URL__'

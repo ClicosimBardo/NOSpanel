@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx SSH Utilities - Layer 2
+NosPanel SSH Utilities - Layer 2
 SSH connection management, rate limiting, and execution.
 """
 
@@ -66,7 +66,7 @@ def check_auth_action_rate_limit(key: str, max_attempts: int = 5, window: int = 
 # TODO: persist to redis or file?
 active_sessions = {}  # session_id -> {user, created_at, last_activity, role}
 
-# NS: Track PegaProx user who initiated each task (UPID -> username)
+# NS: Track NosPanel user who initiated each task (UPID -> username)
 # This allows us to show who triggered a task in the UI, not just the Proxmox user (root@pam)
 # Now persisted to database so it survives restarts and is visible to all users
 task_pegaprox_users_cache = {}  # In-memory cache for fast lookups

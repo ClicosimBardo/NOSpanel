@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Caching & Rate Limiting - Layer 3
+NosPanel Caching & Rate Limiting - Layer 3
 API rate limiter and storage data cache.
 """
 

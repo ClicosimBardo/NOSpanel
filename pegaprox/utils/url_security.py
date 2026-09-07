@@ -1,7 +1,7 @@
 """URL safety checks for outbound HTTP — SSRF defense (Aikido SAST hardening, May 2026).
 
 Outbound HTTP from the backend that takes admin- or user-supplied URLs is the
-classic SSRF vector. Most call sites in PegaProx hand a URL into requests.* or
+classic SSRF vector. Most call sites in NosPanel hand a URL into requests.* or
 urllib.request — examples are OIDC discovery, ACME directory, plugin webhook
 push, SIEM forwarding, VMware host base URL.
 

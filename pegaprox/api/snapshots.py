@@ -419,7 +419,7 @@ def _execute_policy(policy_id, force=False):
         snap = _snap_name(policy['id'])
         create_ok = False
         try:
-            res = mgr.create_snapshot(node, vmid, vm_type, snap, f"PegaProx policy {policy['name']}", policy['include_ram'])
+            res = mgr.create_snapshot(node, vmid, vm_type, snap, f"NosPanel policy {policy['name']}", policy['include_ram'])
             if res.get('success'):
                 # MK May 2026 (#436 aalandez): create_snapshot returns success as soon
                 # as PVE accepts the request and the task starts — NOT when it

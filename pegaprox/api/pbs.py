@@ -536,7 +536,7 @@ def _pbs_vm_name_lookup(pbs_mgr):
             key = (backup_t, str(vmid))
             # Real name preferred. If a VM has no name (fresh creates, restored
             # configs without `name`), still register it so the UI knows the VM
-            # is *known* to PegaProx — synthesise "VM/CT <id>" as label.
+            # is *known* to NosPanel — synthesise "VM/CT <id>" as label.
             if key not in name_map:
                 name_map[key] = name or f"{'CT' if backup_t == 'ct' else 'VM'} {vmid}"
     return name_map

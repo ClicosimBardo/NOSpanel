@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Broadcast Thread - Layer 7
+NosPanel Broadcast Thread - Layer 7
 SSE/WebSocket resource broadcast loop.
 """
 
@@ -134,7 +134,7 @@ def broadcast_resources_loop():
                         except Exception as e:
                             logging.warning(f"[SSE] Ticket refresh failed for '{cid}': {e}")
 
-            # NS Apr 2026 — VMware keepalive. Customers reported PegaProx losing
+            # NS Apr 2026 — VMware keepalive. Customers reported NosPanel losing
             # the ESXi connection over time; ESXi defaults to a 30-min idle session
             # timeout. Run ensure_connected() (which now includes a cheap session
             # ping) every ~4 min on a worker thread so a slow vCenter can't stall
@@ -164,7 +164,7 @@ def broadcast_resources_loop():
                         return
                     # NS: Feb 2026 - AUTO-RECONNECT disconnected clusters
                     # Without this, a network reload (ifreload) permanently kills the connection
-                    # until PegaProx is restarted. Now we retry every 10 seconds.
+                    # until NosPanel is restarted. Now we retry every 10 seconds.
                     # MK 2026-05-31 — log backoff. Previously the "is disconnected,
                     # attempting reconnect..." INFO line fired every 10s while a
                     # cluster stayed down → ~360 INFO entries per hour per dead
@@ -378,7 +378,7 @@ def broadcast_resources_loop():
                                 if not getattr(vmw_mgr, 'connected', False):
                                     # NS Apr 2026 — auto-reconnect mirrors Proxmox path.
                                     # Otherwise a transient ESXi blip leaves us "disconnected"
-                                    # forever until the user restarts PegaProx.
+                                    # forever until the user restarts NosPanel.
                                     try:
                                         if not vmw_mgr.ensure_connected():
                                             continue

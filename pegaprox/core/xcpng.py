@@ -214,7 +214,7 @@ class XcpngManager:
                 session = XenAPI.Session(url, ignore_ssl=not self.config.ssl_verification)
                 session.xenapi.login_with_password(
                     self.config.user, self.config.pass_,
-                    '1.0', 'PegaProx'
+                    '1.0', 'NosPanel'
                 )
                 self._session = session
                 self.is_connected = True
@@ -1244,7 +1244,7 @@ class XcpngManager:
             disk_bytes = disk_gb * 1024 * 1024 * 1024
             vdi_rec = {
                 'name_label': f'{vm_name} disk 0',
-                'name_description': 'Created by PegaProx',
+                'name_description': 'Created by NosPanel',
                 'SR': target_sr,
                 'virtual_size': str(disk_bytes),
                 'type': 'user',
@@ -1724,7 +1724,7 @@ class XcpngManager:
                 del self._active_tasks[tid]
 
     def get_tasks(self, limit=50) -> list:
-        """Return active/recent tasks in PegaProx format."""
+        """Return active/recent tasks in NosPanel format."""
         with self._task_lock:
             tasks = []
             for task_id, info in list(self._active_tasks.items())[-limit:]:
@@ -1855,7 +1855,7 @@ class XcpngManager:
 
             vdi_rec = {
                 'name_label': disk_config.get('name', f'disk-{vmid}'),
-                'name_description': f'Added via PegaProx',
+                'name_description': f'Added via NosPanel',
                 'SR': sr_ref,
                 'virtual_size': str(size_bytes),
                 'type': 'user',
@@ -2572,7 +2572,7 @@ class XcpngManager:
                 # XAPI ISO import is via VDI create + HTTP upload
                 vdi_rec = {
                     'name_label': _sanitize_str(filename),
-                    'name_description': 'Uploaded via PegaProx',
+                    'name_description': 'Uploaded via NosPanel',
                     'SR': sr_ref,
                     'virtual_size': '0',  # will be set by import
                     'type': 'user',
@@ -3852,7 +3852,7 @@ sed -i -e '/^Ciphers /d' -e '/^KexAlgorithms /d' -e '/^MACs /d' \
   -e '/^IgnoreRhosts /d' /etc/ssh/sshd_config
 cat >> /etc/ssh/sshd_config << 'SSHEOF'
 
-# CIS SSH Cryptographic Hardening - applied by PegaProx
+# CIS SSH Cryptographic Hardening - applied by NosPanel
 Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
@@ -4332,7 +4332,7 @@ echo DONE""",
             # connect to remote pool to get session
             remote_session = XenAPI.Session(target_endpoint, ignore_ssl=True)
             remote_session.xenapi.login_with_password(
-                self.config.user, self.config.pass_, '1.0', 'PegaProx')
+                self.config.user, self.config.pass_, '1.0', 'NosPanel')
 
             # build migrate_send params
             dest = {
@@ -5012,7 +5012,7 @@ echo DONE""",
 
     def backup_vm(self, node, vmid, vm_type='qemu', **kwargs):
         # NS: XCP-ng backups are done via Xen Orchestra, not built-in
-        self.logger.warning(f"backup_vm called for {vmid} but XCP-ng backup not supported via PegaProx")
+        self.logger.warning(f"backup_vm called for {vmid} but XCP-ng backup not supported via NosPanel")
         return None
 
     # alerts compat

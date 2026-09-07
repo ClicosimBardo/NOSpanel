@@ -551,7 +551,7 @@ def execute_test_failover(plan_id):
     if tgt_mgr is None:
         for vm in vms:
             results[str(vm['vmid'])] = {'success': False,
-                                        'error': f"Target cluster '{plan['target_cluster']}' not connected / not configured in PegaProx"}
+                                        'error': f"Target cluster '{plan['target_cluster']}' not connected / not configured in NosPanel"}
         logger.error(f"[SR] Test failover: target cluster '{plan['target_cluster']}' unreachable; aborting plan '{_sl(plan['name'])}'")
 
     for i, vm in enumerate(vms):
@@ -594,7 +594,7 @@ def execute_test_failover(plan_id):
                             if vtype == 'lxc':
                                 _snapn = f"srtest{test_vmid}"
                                 _snr = tgt_mgr.create_snapshot(node_name, target_vmid, vtype, _snapn,
-                                                               description='PegaProx SR test-failover (temporary)')
+                                                               description='NosPanel SR test-failover (temporary)')
                                 if isinstance(_snr, dict) and _snr.get('success'):
                                     _temp_snap = _snapn
                                     try:
@@ -879,7 +879,7 @@ def heartbeat_loop():
 
 
 def recover_orphan_runs():
-    """One-shot cleanup of in-flight rows left over from a previous PegaProx
+    """One-shot cleanup of in-flight rows left over from a previous NosPanel
     process. Without this, `site_recovery_events` rows that were `status=running`
     when the service crashed/restarted stay that way forever — and the matching
     `site_recovery_plans.status` keeps showing 'running' / 'testing' in the UI,

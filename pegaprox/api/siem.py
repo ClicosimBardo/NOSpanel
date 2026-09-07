@@ -509,7 +509,7 @@ def test_target(tid):
             'severity': 'info',
             'cluster': '',
             'ip_address': request.remote_addr or '',
-            'details': f'Test event from PegaProx for target {target["name"]}',
+            'details': f'Test event from NosPanel for target {target["name"]}',
         }
         ok = _deliver_one(target, evt)
         c.execute('SELECT * FROM siem_targets WHERE id = ?', (tid,))

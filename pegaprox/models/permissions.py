@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Permissions & Roles - Layer 0
+NosPanel Permissions & Roles - Layer 0
 No pegaprox imports allowed.
 """
 

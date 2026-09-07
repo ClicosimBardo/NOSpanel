@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Realtime Updates - Layer 4
+NosPanel Realtime Updates - Layer 4
 WebSocket and SSE broadcasting utilities.
 """
 

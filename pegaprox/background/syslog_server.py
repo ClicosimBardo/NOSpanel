@@ -1,9 +1,9 @@
 """
-PegaProx Syslog Server — receives syslog messages via UDP/TCP
+NosPanel Syslog Server — receives syslog messages via UDP/TCP
 Stores events in SQLite for the integrated log viewer.
 
 NS: Apr 2026 — rewritten for gevent compatibility (no asyncio, no multiprocessing)
-Original PR by gyptazy, adapted to fit PegaProx architecture.
+Original PR by gyptazy, adapted to fit NosPanel architecture.
 """
 import os
 import time

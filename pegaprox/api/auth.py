@@ -339,7 +339,7 @@ def oidc_test_connection():
         return jsonify({'success': False, 'results': results})
 
     # NS Apr 2026 (#188) — surface whether discovery succeeded so admins immediately see when
-    # PegaProx is using the (often wrong) issuer-relative fallback.
+    # NosPanel is using the (often wrong) issuer-relative fallback.
     if config.get('provider') != 'entra':
         if endpoints.get('_discovery_used'):
             results.append({'step': 'Discovery', 'status': 'ok',
@@ -432,7 +432,7 @@ def auth_setup():
     if is_initialized():
         # already done, no replay
         return jsonify({
-            'error': 'PegaProx is already initialised',
+            'error': 'NosPanel is already initialised',
             'code': 'ALREADY_INITIALIZED',
         }), 409
 
@@ -498,7 +498,7 @@ def auth_login():
     # which let any network-reachable fresh install be taken over).
     if not is_initialized():
         return jsonify({
-            'error': 'PegaProx is not initialised — run the setup wizard first',
+            'error': 'NosPanel is not initialised — run the setup wizard first',
             'code': 'NOT_INITIALIZED',
         }), 503
 
@@ -636,7 +636,7 @@ def auth_login():
                     logging.info(f"[LDAP] User '{username}' authenticated via LDAP from {client_ip}")
             else:
                 logging.warning(f"[LDAP] User '{username}' found in LDAP but auto-create is disabled")
-                return jsonify({'error': 'User not authorized in PegaProx. Contact admin.'}), 401
+                return jsonify({'error': 'User not authorized in NosPanel. Contact admin.'}), 401
         elif ldap_result.get('error') == 'User not found in LDAP':
             # NS: User not in LDAP - fall through to local auth
             logging.debug(f"[LDAP] User '{username}' not in LDAP, trying local auth")
@@ -1362,7 +1362,7 @@ def verify_password_api():
         # made re-auth a no-op for OIDC users. attacker with the cookie passes the gate
         # for sensitive ops (delete cluster, rotate creds, etc).
         # NS May 2026 (v0.9.9.1 follow-up) — TOTP step-up was wrong as a hard
-        # requirement: PegaProx blocks OIDC users from enrolling TOTP at /2fa/setup
+        # requirement: NosPanel blocks OIDC users from enrolling TOTP at /2fa/setup
         # ("2FA is managed by your OIDC provider"), so a strict TOTP gate locks
         # OIDC admins out of re-auth-gated ops entirely. Correct ladder:
         #   1. WebAuthn proof (works regardless of auth_source — independent enrolment)
@@ -1531,8 +1531,8 @@ def setup_2fa():
     
     user = users_db[username]
     
-    # NS: OIDC/Entra users should use their IdP's MFA, not PegaProx 2FA
-    # PegaProx 2FA only works for login form (LDAP + local), not OIDC redirect flow
+    # NS: OIDC/Entra users should use their IdP's MFA, not NosPanel 2FA
+    # NosPanel 2FA only works for login form (LDAP + local), not OIDC redirect flow
     if user.get('auth_source', 'local') in ('oidc', 'entra'):
         provider_name = 'Microsoft Entra ID' if user.get('auth_source') == 'entra' else 'your OIDC provider'
         return jsonify({'error': f'2FA is managed by {provider_name}. Please enable MFA there instead.'}), 400
@@ -1547,7 +1547,7 @@ def setup_2fa():
     
     # Generate provisioning URI
     totp = pyotp.TOTP(secret)
-    uri = totp.provisioning_uri(name=username, issuer_name='PegaProx')
+    uri = totp.provisioning_uri(name=username, issuer_name='NosPanel')
     
     # Generate QR code as base64
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
@@ -1645,7 +1645,7 @@ def disable_2fa():
     
     user = users_db[username]
     
-    # NS: OIDC/Entra users manage MFA through their IdP - shouldn't have PegaProx 2FA
+    # NS: OIDC/Entra users manage MFA through their IdP - shouldn't have NosPanel 2FA
     if user.get('auth_source', 'local') in ('oidc', 'entra'):
         return jsonify({'error': '2FA is managed by your identity provider'}), 400
     

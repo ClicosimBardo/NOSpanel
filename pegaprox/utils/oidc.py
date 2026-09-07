@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx OIDC/OAuth2 Authentication - Layer 4
+NosPanel OIDC/OAuth2 Authentication - Layer 4
 """
 
 import json
@@ -256,7 +256,7 @@ def get_oidc_endpoints(config: dict) -> dict:
             logging.warning(
                 f"[OIDC] Discovery failed for {discovery_url}: {e}. "
                 f"Authorization endpoint may be wrong for non-Microsoft providers (Authentik, etc.) — "
-                f"PegaProx will guess {authority}/authorize which is often a 404."
+                f"NosPanel will guess {authority}/authorize which is often a 404."
             )
 
         # Fallback: construct from authority URL directly
@@ -565,7 +565,7 @@ def oidc_get_user_groups(config: dict, access_token: str) -> list:
 
 
 def oidc_map_groups_to_role(config: dict, groups: list, id_token_claims: dict = None) -> dict:
-    """Map OIDC groups to PegaProx role, tenant, and permissions
+    """Map OIDC groups to NosPanel role, tenant, and permissions
     
     LW: Works with Entra group IDs and generic OIDC group claims
     Returns: {'role': str, 'tenant': str, 'permissions': [], 'tenant_permissions': {}}

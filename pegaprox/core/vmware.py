@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx VMware/vCenter Integration - Layer 5
+NosPanel VMware/vCenter Integration - Layer 5
 Connects to vCenter Server or standalone ESXi hosts via REST API.
 """
 
@@ -55,7 +55,7 @@ class VMwareManager:
         self._base_url = f"https://{self.host}:{self.port}"
         self._connect_lock = threading.Lock()  # Prevent concurrent reconnect attempts
         self._connect_fail_count = 0  # Track consecutive failures for log suppression
-        # NS Apr 2026 — session-keepalive plumbing. Customers reported PegaProx
+        # NS Apr 2026 — session-keepalive plumbing. Customers reported NosPanel
         # losing the ESXi connection after ~30 min of low UI activity. ESXi defaults
         # to a 30-min idle timeout on REST/SOAP sessions, so we ping the server
         # every PING_INTERVAL seconds to keep the session warm and detect stale
@@ -1450,7 +1450,7 @@ class VMwareManager:
         The VM continues running, writing to a delta file.
         This lets us copy the base VMDK safely via SSHFS."""
         return self.create_snapshot(vm_id, '_pegaprox_migration_snap',
-            'PegaProx live migration - do not delete manually', False, True)
+            'NosPanel live migration - do not delete manually', False, True)
     
     def delete_migration_snapshot(self, vm_id: str) -> dict:
         """Delete the migration snapshot, consolidating delta back into base.

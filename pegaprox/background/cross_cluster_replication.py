@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Cross-Cluster Replication Scheduler - Layer 7
+NosPanel Cross-Cluster Replication Scheduler - Layer 7
 Background thread that runs snapshot-based replication jobs on schedule.
 
 MK: Feb 2026 - cron-like scheduler for cross-cluster replication.

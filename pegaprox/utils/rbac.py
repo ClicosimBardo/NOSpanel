@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx RBAC - Layer 4
+NosPanel RBAC - Layer 4
 Custom roles, tenants, VM ACLs, pool membership cache.
 """
 
@@ -174,7 +174,7 @@ def get_role_permissions_for_user(user: dict, tenant_id: str = None) -> list:
 # =============================================================================
 # MULTI-TENANCY
 # Feature requested on Reddit (r/selfhosted) - MSPs wanted to manage multiple 
-# customers from one PegaProx instance without them seeing each others VMs.
+# customers from one NosPanel instance without them seeing each others VMs.
 # Took about a weekend to implement properly.
 #
 # Tenants are like organizations - users belong to tenants

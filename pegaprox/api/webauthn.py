@@ -107,13 +107,13 @@ def _get_rp_or_error():
     if _is_ip_literal(host):
         return None, (jsonify({
             'error': 'WebAuthn does not support IP addresses as host. '
-                     'Open PegaProx via its hostname (e.g. https://pegaprox.local:5000 or '
+                     'Open NosPanel via its hostname (e.g. https://pegaprox.local:5000 or '
                      'https://localhost:5000) and try again. If you are behind a reverse '
                      'proxy, make sure it forwards the Host or X-Forwarded-Host header.',
             'code': 'ip_literal_host',
             'current_host': host,
         }), 400)
-    return PublicKeyCredentialRpEntity(name="PegaProx", id=host), None
+    return PublicKeyCredentialRpEntity(name="NosPanel", id=host), None
 
 
 def _get_server_or_error():
@@ -452,7 +452,7 @@ def delete_credential(cred_id):
 def is_available():
     """Public — login form uses this to decide whether to show the 'Use Security Key' button.
     Also reports whether the current request host is WebAuthn-usable, so the UI can
-    show a helpful banner when the user is accessing PegaProx by IP."""
+    show a helpful banner when the user is accessing NosPanel by IP."""
     host = _effective_host()
     host_ok = bool(host) and not _is_ip_literal(host)
     return jsonify({

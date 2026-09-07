@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Config Management - Layer 3
+NosPanel Config Management - Layer 3
 Encryption key management and config load/save.
 """
 

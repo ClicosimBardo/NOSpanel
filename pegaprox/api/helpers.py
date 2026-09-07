@@ -63,7 +63,7 @@ def load_server_settings():
         'acme_dns_cloudflare_account_id': '',
         'acme_allow_private_ca': False,  # #685 — opt-in to reach a private/internal ACME CA (mirrors oidc_allow_private_ip)
         'logo_url': '',
-        'app_name': 'PegaProx',
+        'app_name': 'NosPanel',
         # HTTP redirect port - NS Jan 2026
         # Now that we have protocol detection on the main port, this is only needed
         # if you want HTTP:80 → HTTPS:5000 redirect
@@ -94,13 +94,13 @@ def load_server_settings():
         'smtp_user': '',
         'smtp_password': '',  # stored encrypted ideally
         'smtp_from_email': '',
-        'smtp_from_name': 'PegaProx Alerts',
+        'smtp_from_name': 'NosPanel Alerts',
         'smtp_tls': True,
         'smtp_ssl': False,
         # Alert notification settings
         'alert_email_recipients': [],  # list of email addresses
         'alert_cooldown': 300,  # Don't send same alert within 5 min
-        # NS Apr 2026 (#331) — email notification when a new PegaProx release appears.
+        # NS Apr 2026 (#331) — email notification when a new NosPanel release appears.
         # Opt-in; re-uses alert_email_recipients. Dedupes via last-notified-version.
         'alert_update_available': False,
         'alert_last_notified_version': '',
@@ -290,7 +290,7 @@ def get_login_settings():
     }
 
 def register_task_user(upid: str, username: str, cluster_id: str = None):
-    """Register which PegaProx user initiated a task - persists to database"""
+    """Register which NosPanel user initiated a task - persists to database"""
     if not upid or not username:
         return
     
@@ -323,7 +323,7 @@ def register_task_user(upid: str, username: str, cluster_id: str = None):
         logging.debug(f"Failed to persist task user to DB: {e}")
 
 def get_task_user(upid: str) -> str:
-    """Get PegaProx user who initiated a task - checks cache first, then database"""
+    """Get NosPanel user who initiated a task - checks cache first, then database"""
     if not upid:
         return None
     

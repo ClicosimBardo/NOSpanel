@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Audit Logging - Layer 3
+NosPanel Audit Logging - Layer 3
 """
 
 import os

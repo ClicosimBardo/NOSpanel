@@ -115,7 +115,7 @@ def get_clusters():
                 'connected': mgr.is_connected,
                 'connection_error': mgr.connection_error,
                 # #16745 — presence only (never the key). Lets the Harden PVE Node UI warn before
-                # the sshd_hardening control (PermitRootLogin prohibit-password) cuts off PegaProx's
+                # the sshd_hardening control (PermitRootLogin prohibit-password) cuts off NosPanel's
                 # own access on a cluster we reach by root password with no key deployed.
                 'has_ssh_key': bool(getattr(mgr.config, 'ssh_key', '')),
                 'migration_threshold': mgr.config.migration_threshold,
@@ -2118,7 +2118,7 @@ def update_ha_config(cluster_id):
     if 'strict_fencing' in data:
         manager.ha_config['strict_fencing'] = data['strict_fencing']
 
-    # PegaProx VM auto-recovery - LW Mar 2026
+    # NosPanel VM auto-recovery - LW Mar 2026
     old_pegaprox_vmid = manager.ha_config.get('pegaprox_vmid', '')
     if 'pegaprox_vmid' in data:
         manager.ha_config['pegaprox_vmid'] = data['pegaprox_vmid']
@@ -2384,7 +2384,7 @@ def create_proxmox_ha_group(cluster_id):
             'type': 'node-affinity',
             'nodes': nodes,
             # /rules requires non-empty resources. Caller can specify them
-            # via 'resources' on the request body; otherwise PegaProx passes
+            # via 'resources' on the request body; otherwise NosPanel passes
             # whatever the resource picker collected.  If empty PVE will
             # reject with a clear message, which we surface to the user.
             'resources': data.get('resources', '') or '',

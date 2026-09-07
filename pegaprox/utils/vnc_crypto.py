@@ -2,9 +2,9 @@
 
 Defends against middleboxes (TLS-inspection NGFW, EDR network filter, ...) that
 re-encrypt the outer TLS and modify bytes. The browser still negotiates TLS with
-PegaProx and the inspection engine still re-encrypts that, but inside the
+NosPanel and the inspection engine still re-encrypts that, but inside the
 WebSocket frames we put a SECOND layer of authenticated encryption with a
-session key shared only between browser and PegaProx server.
+session key shared only between browser and NosPanel server.
 
 The inspection engine sees: TLS-encrypted blobs → decrypt → opaque-encrypted
 blobs (our AES-GCM) → can't recognize protocol → leaves bytes alone → re-encrypt

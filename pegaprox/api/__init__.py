@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx API Blueprint Registration
+NosPanel API Blueprint Registration
 """
 import logging
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx VMware-to-Proxmox Migration - Layer 5
+NosPanel VMware-to-Proxmox Migration - Layer 5
 V2P migration infrastructure.
 """
 
@@ -935,7 +935,7 @@ def _run_v2p_migration(task):
             # We accept slightly stale guest state in exchange for the snapshot reliably appearing.
             snap_result = vmware_mgr.create_snapshot(
                 task.vm_id, '_pegaprox_migration_snap',
-                'PegaProx live migration - do not delete manually',
+                'NosPanel live migration - do not delete manually',
                 memory=False, quiesce=False)
             if 'error' in snap_result:
                 task.set_phase('failed', f'snapshot_zero S0 creation failed: {snap_result.get("error")}')
@@ -1144,7 +1144,7 @@ def _run_v2p_migration(task):
             # base, writes go to the delta), then vmkfstools-clone the *frozen base* ON the ESXi
             # host. vmkfstools is vmkernel-aware, so it reads the active-chain base extent that a
             # raw dd/HTTP/SSHFS open cannot ("Device or resource busy"). The static clone then
-            # rides PegaProx's existing transfer + per-storage import path (CEPH/RBD krbd, LVM,
+            # rides NosPanel's existing transfer + per-storage import path (CEPH/RBD krbd, LVM,
             # LVM-thin, dir/qcow2) verbatim — so this branch is just the clone front-end + cutover.
             # v1 = single snapshot + short cutover (no iterative CBT delta yet).
             # NS Jun 2026 — this is now ALSO the implicit path for transfer_mode='auto' (Nico:
@@ -1181,7 +1181,7 @@ def _run_v2p_migration(task):
                 for _attempt in range(2):
                     snap = vmware_mgr.create_snapshot(
                         task.vm_id, '_pegaprox_clone_snap',
-                        'PegaProx vmkfstools clone - do not delete', memory=False, quiesce=False)
+                        'NosPanel vmkfstools clone - do not delete', memory=False, quiesce=False)
                     for _ in range(12):  # poll ~60s — task may finish after the call returns
                         if _clone_snap_present():
                             snap_ok = True; break
@@ -2449,7 +2449,7 @@ def _inject_virtio_drivers(pve_mgr, task):
         # ran into "registry corrupt" because RunOnce executes with the
         # logged-in user's standard token (no elevation), even for admins.
         # SYSTEM service has full token, no UAC.
-        "PEGADIR=\"$WIN_MNT/$WDIR/../PegaProx\"\n"
+        "PEGADIR=\"$WIN_MNT/$WDIR/../NosPanel\"\n"
         "mkdir -p \"$PEGADIR\"\n"
         "MSI_OK=0\n"
         # Pick the right MSI by host arch — almost always x64 these days
@@ -2498,12 +2498,12 @@ def _inject_virtio_drivers(pve_mgr, task):
         # any manual `sc config` step on the customer side.
         "cmdline = (\n"
         "    'cmd.exe /c '\n"
-        "    '(msiexec /i \"C:\\\\PegaProx\\\\virtio-win-gt-x64.msi\" '\n"
-        "    'ADDLOCAL=ALL /quiet /norestart /l*v \"C:\\\\PegaProx\\\\msi.log\") & '\n"
-        "    '(sc config vioscsi start= boot >> \"C:\\\\PegaProx\\\\bootarm.log\" 2>&1) & '\n"
-        "    '(sc config viostor start= boot >> \"C:\\\\PegaProx\\\\bootarm.log\" 2>&1) & '\n"
-        "    '(sc delete PegaProxFirstBoot >> \"C:\\\\PegaProx\\\\service.log\" 2>&1) & '\n"
-        "    '(del \"C:\\\\PegaProx\\\\virtio-win-gt-x64.msi\" 2>nul)'\n"
+        "    '(msiexec /i \"C:\\\\NosPanel\\\\virtio-win-gt-x64.msi\" '\n"
+        "    'ADDLOCAL=ALL /quiet /norestart /l*v \"C:\\\\NosPanel\\\\msi.log\") & '\n"
+        "    '(sc config vioscsi start= boot >> \"C:\\\\NosPanel\\\\bootarm.log\" 2>&1) & '\n"
+        "    '(sc config viostor start= boot >> \"C:\\\\NosPanel\\\\bootarm.log\" 2>&1) & '\n"
+        "    '(sc delete PegaProxFirstBoot >> \"C:\\\\NosPanel\\\\service.log\" 2>&1) & '\n"
+        "    '(del \"C:\\\\NosPanel\\\\virtio-win-gt-x64.msi\" 2>nul)'\n"
         ")\n"
         "for cs_name in ['ControlSet001','ControlSet002']:\n"
         "    cs = fc(h.root(), cs_name)\n"
@@ -2511,7 +2511,7 @@ def _inject_virtio_drivers(pve_mgr, task):
         "    services = fc(cs, 'Services')\n"
         "    if services is None: continue\n"
         "    svc = navigate(services, ['PegaProxFirstBoot'])\n"
-        "    set_sz(svc, 'DisplayName', 'PegaProx First-Boot Driver Install')\n"
+        "    set_sz(svc, 'DisplayName', 'NosPanel First-Boot Driver Install')\n"
         "    set_dword(svc, 'Type', 0x10)\n"
         "    set_dword(svc, 'Start', 2)\n"
         "    set_dword(svc, 'ErrorControl', 0)\n"
@@ -2611,7 +2611,7 @@ def _inject_virtio_drivers(pve_mgr, task):
 #   take final snapshot, transfer last delta
 #   start VM on Proxmox, shut down ESXi VM, cleanup all snapshots
 def _ssh_esxi_exec(esxi_host, esxi_user, esxi_pass, cmd, timeout=30):
-    """Run a command on ESXi via sshpass+ssh from this PegaProx host. Returns (rc, stdout, stderr).
+    """Run a command on ESXi via sshpass+ssh from this NosPanel host. Returns (rc, stdout, stderr).
 
     NS Apr 2026 — ControlMaster opt-in. V2P migrations issue dozens of SSH calls
     to the same ESXi host (vim-cmd, ls, dd, rm). With ControlMaster the first
@@ -2913,7 +2913,7 @@ def _ensure_guest_sector_size_512(pve_mgr, task, disk_bus, disk_count):
         task.log(f"Applied 512b sector emulation ({disk_count} disk(s)): {args_str}")
         # If the customer later swaps scsi0 → sata0 via the Proxmox UI, these
         # static args break ("no device 'scsi0' defined"). They can recover via
-        # the "Fix QEMU args" action in the PegaProx VM context menu — we
+        # the "Fix QEMU args" action in the NosPanel VM context menu — we
         # explicitly do NOT install anything on the node side for this.
     except Exception as e:
         task.log(f"Sector-size pre-check failed (non-fatal, VM may still boot): {e}")

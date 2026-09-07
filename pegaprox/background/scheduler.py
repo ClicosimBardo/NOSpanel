@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Task Scheduler - Layer 7
+NosPanel Task Scheduler - Layer 7
 Background scheduled task execution.
 """
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Input Sanitization - Layer 2
+NosPanel Input Sanitization - Layer 2
 """
 
 import re

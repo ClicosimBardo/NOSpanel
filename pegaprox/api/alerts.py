@@ -695,7 +695,7 @@ def test_alert_channel(cid):
     if not ch:
         return jsonify({'error': 'channel not found'}), 404
     alert = {
-        'alert_name': 'PegaProx test alert',
+        'alert_name': 'NosPanel test alert',
         'metric': 'test',
         'current_value': 42,
         'threshold': 0,
@@ -704,7 +704,7 @@ def test_alert_channel(cid):
         'target_name': 'pegaprox',
         'cluster_id': 'test-cluster',
         'severity': 'info',
-        'message': 'This is a test alert triggered from PegaProx settings.',
+        'message': 'This is a test alert triggered from NosPanel settings.',
         'timestamp': datetime.now().isoformat(),
     }
     ok, _detail = send_to_channel(ch, alert)

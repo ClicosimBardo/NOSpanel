@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Globals - Layer 1
+NosPanel Globals - Layer 1
 Shared mutable state containers. Only plain Python, no pegaprox imports.
 """
 

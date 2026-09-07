@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Task Models - Layer 0
+NosPanel Task Models - Layer 0
 No pegaprox imports allowed.
 """
 
@@ -122,7 +122,7 @@ class PegaProxConfig:
         self.api_token_user = cluster_data.get('api_token_user', '')    # NS Mar 2026 - e.g. "root@pam!pegaprox"
         self.api_token_secret = cluster_data.get('api_token_secret', '')
         # MK Apr 2026 — VNC SSH-Tunnel-Mode. When True, the VNC websocket from
-        # PegaProx to PVE is routed through the cluster's existing SSH connection
+        # NosPanel to PVE is routed through the cluster's existing SSH connection
         # (same creds as ssh_user/ssh_key/pass_) instead of going direct to
         # https://pve:8006. Defeats TLS-inspection middleboxes that re-encrypt
         # the second leg and modify binary RFB bytes. Customer-side opt-in.

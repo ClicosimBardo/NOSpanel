@@ -13,7 +13,7 @@ class CappedTimedFileHandler(TimedRotatingFileHandler):
 
     Use when only the most recent N hours of operational logs matter and you
     want a strict upper bound on disk use. Audit logs go through a separate
-    pipeline (see utils/audit.py), this only affects /opt/PegaProx/logs/<cluster>.log.
+    pipeline (see utils/audit.py), this only affects /opt/NosPanel/logs/<cluster>.log.
     """
 
     def doRollover(self):

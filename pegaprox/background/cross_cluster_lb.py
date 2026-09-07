@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Cross-Cluster Load Balancer - Layer 7
+NosPanel Cross-Cluster Load Balancer - Layer 7
 Background thread that balances VM load across clusters within a group.
 
 NS: Feb 2026 - extends the per-cluster LB to work across cluster boundaries.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Authentication - Layer 4
+NosPanel Authentication - Layer 4
 Password hashing, sessions, API tokens, require_auth decorator.
 """
 # NS: finally split this out, the monolith was getting ridiculous

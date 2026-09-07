@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx Database - Layer 2
+NosPanel Database - Layer 2
 SQLite database wrapper with encryption support.
 """
 # MK: the db stuff was the worst part of the monolith, everything was just inline sql
@@ -515,7 +515,7 @@ class PegaProxDB:
             CREATE INDEX IF NOT EXISTS idx_migration_timestamp ON migration_history(timestamp DESC)
         ''')
 
-        # #720 — persist SOFT (non-HA) node maintenance so it survives a PegaProx restart. Native HA
+        # #720 — persist SOFT (non-HA) node maintenance so it survives a NosPanel restart. Native HA
         # maintenance is re-derived from PVE on each poll (#78) and is NOT stored here.
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS node_maintenance (
@@ -1325,7 +1325,7 @@ class PegaProxDB:
         except Exception:
             pass
 
-        # NS: Feb 2026 - Space-efficient LVM COW snapshots managed by PegaProx
+        # NS: Feb 2026 - Space-efficient LVM COW snapshots managed by NosPanel
         try:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS efficient_snapshots (
@@ -4196,7 +4196,7 @@ class PegaProxDB:
     # ========================================
     
     def save_node_maintenance(self, cluster_id: str, node: str):
-        """#720 — persist a soft (non-HA) node-maintenance entry so it survives a PegaProx restart."""
+        """#720 — persist a soft (non-HA) node-maintenance entry so it survives a NosPanel restart."""
         cursor = self.conn.cursor()
         cursor.execute(
             'INSERT OR REPLACE INTO node_maintenance (cluster_id, node, entered_at) VALUES (?, ?, '

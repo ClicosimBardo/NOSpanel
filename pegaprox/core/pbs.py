@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx PBS Manager - Layer 5
+NosPanel PBS Manager - Layer 5
 Proxmox Backup Server integration.
 """
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PegaProx SSH Connection Pool & ControlMaster Helpers - Layer 4
+NosPanel SSH Connection Pool & ControlMaster Helpers - Layer 4
 
 NS Apr 2026 — Phase 2 SSH stabilization for big clusters (15+ nodes).
 This module is PURELY ADDITIVE. Existing SSH paths in core/manager.py

@@ -83,7 +83,7 @@ def _acme_dns_config(settings):
 @bp.route('/api/pegaprox/version', methods=['GET'])
 @require_auth()
 def get_pegaprox_version():
-    """Get current PegaProx version"""
+    """Get current NosPanel version"""
     return jsonify({
         'version': PEGAPROX_VERSION,
         'build': PEGAPROX_BUILD,
@@ -280,7 +280,7 @@ def _managed_update_guidance(method):
     """Operator-facing 'update it the right way' message for a non-source install."""
     return {
         'apt': 'This instance is managed by APT/dpkg. Update it with the command below. '
-               'For hands-off updates, enable unattended-upgrades on the PegaProx repo.',
+               'For hands-off updates, enable unattended-upgrades on the NosPanel repo.',
         'docker': 'This instance runs in a container. Pull a fresh image and recreate the '
                   'container — an in-place update would be discarded on the next pull.',
     }.get(method, '')
@@ -297,7 +297,7 @@ def _managed_update_command(method):
 @bp.route('/api/pegaprox/check-update', methods=['GET'])
 @require_auth(perms=['update.manage'])
 def check_pegaprox_update():
-    """Check for PegaProx updates (mirror + GitHub fallback).
+    """Check for NosPanel updates (mirror + GitHub fallback).
 
     NS Apr 2026 — short-circuited when air-gap mode is enabled. Returns the
     current version with a hint flag so the UI can render "Air-gap mode active —
@@ -419,7 +419,7 @@ def check_pegaprox_update():
 @bp.route('/api/pegaprox/update', methods=['POST'])
 @require_auth(perms=['update.manage'])
 def perform_pegaprox_update():
-    """PegaProx auto-update from GitHub
+    """NosPanel auto-update from GitHub
 
     NS: Rewritten feb 2026 - archive-based (no manual releases needed)
     PRIMARY: downloads GitHub source archive, extracts, copies.
@@ -863,7 +863,7 @@ def perform_pegaprox_update():
 
         def restart_server():
             time.sleep(restart_delay)
-            logging.info("Restarting PegaProx server...")
+            logging.info("Restarting NosPanel server...")
 
             is_root = os.geteuid() == 0 if hasattr(os, 'geteuid') else False
             has_sudo = shutil.which('sudo') is not None
@@ -962,7 +962,7 @@ def perform_pegaprox_update():
 @bp.route('/api/pegaprox/update/rollback', methods=['POST'])
 @require_auth(perms=['update.manage'])
 def rollback_pegaprox_update():
-    """Rollback to a previous PegaProx version from backup
+    """Rollback to a previous NosPanel version from backup
     
     NS: Rollback functionality - Jan 2026
     """
@@ -1085,7 +1085,7 @@ def rollback_pegaprox_update():
 @bp.route('/api/pegaprox/changelog', methods=['GET'])
 @require_auth()
 def get_pegaprox_changelog():
-    """Get PegaProx changelog (GitHub + mirror fallback)"""
+    """Get NosPanel changelog (GitHub + mirror fallback)"""
     try:
         for url in [GITHUB_VERSION_URL, MIRROR_VERSION_URL]:
             try:
@@ -1186,7 +1186,7 @@ def serve_favicon():
 # genuinely-absent file isn't re-fetched on every page load.
 _SPONSOR_HEAL_SOURCES = (
     "https://updates.pegaprox.com/images/sponsors/{name}",
-    "https://raw.githubusercontent.com/PegaProx/project-pegaprox/main/images/sponsors/{name}",
+    "https://raw.githubusercontent.com/NosPanel/project-pegaprox/main/images/sponsors/{name}",
 )
 _sponsor_heal_misses = {}  # name -> monotonic ts of last failed remote fetch
 _sponsor_mem_cache = {}    # name -> (bytes, content_type) — fallback when images/ isn't writable
@@ -1935,7 +1935,7 @@ def delete_login_background():
 @bp.route('/api/settings/server/restart', methods=['POST'])
 @require_auth(perms=['admin.settings'])
 def restart_server():
-    """Restart the PegaProx server (admin only)"""
+    """Restart the NosPanel server (admin only)"""
     try:
         # Audit log
         user = getattr(request, 'session', {}).get('user', 'system')
@@ -2173,7 +2173,7 @@ def complete_acme_dns_challenge():
 
 @require_auth(roles=[ROLE_ADMIN])
 def backup_config():
-    """Export full PegaProx configuration as encrypted backup (admin only)
+    """Export full NosPanel configuration as encrypted backup (admin only)
     
     SECURITY: Requires user password confirmation and backup encryption password.
     MK: Double password = prevents stolen sessions from exporting data
@@ -2449,7 +2449,7 @@ def _decrypt_backup(encrypted_data: bytes, password: str) -> str:
 @bp.route('/api/config/restore', methods=['POST'])
 @require_auth(roles=[ROLE_ADMIN])
 def restore_config():
-    """Import PegaProx configuration from encrypted backup (admin only)
+    """Import NosPanel configuration from encrypted backup (admin only)
     
     SECURITY: Requires user password confirmation and backup decryption password.
     NS: merge mode is default because overwrite is scary
@@ -3464,7 +3464,7 @@ def oidc_callback_page():
 
 @bp.route('/api/status', methods=['GET'])
 def get_status():
-    """Get PegaProx system status - includes version info
+    """Get NosPanel system status - includes version info
     
     NS: unauthenticated users only get version + build, no cluster details
     """
@@ -3803,8 +3803,8 @@ def generate_support_bundle():
                         safe_env_vars[key] = value
             zf.writestr(f"{bundle_prefix}/environment.json", json.dumps(safe_env_vars, indent=2))
             
-            # 13. PegaProx SSH Session Log (last 100 entries)
-            # NS: Feb 2026 - Track SSH sessions opened through PegaProx WebSocket terminal
+            # 13. NosPanel SSH Session Log (last 100 entries)
+            # NS: Feb 2026 - Track SSH sessions opened through NosPanel WebSocket terminal
             try:
                 db = get_db()
                 cursor = db.conn.cursor()
@@ -3828,7 +3828,7 @@ def generate_support_bundle():
                 zf.writestr(f"{bundle_prefix}/ssh_sessions_error.txt", f"Failed: {str(e)}")
             
             # 14. README
-            readme = f"""PegaProx Support Bundle
+            readme = f"""NosPanel Support Bundle
 ========================
 Generated: {datetime.now().isoformat()}
 Version: {PEGAPROX_VERSION} (Build {PEGAPROX_BUILD})
@@ -3846,7 +3846,7 @@ Contents:
 - pegaprox.log: Application log (last 1000 lines, sensitive data redacted)
 - recent_tasks.json: Recent Proxmox tasks from all clusters
 - environment.json: Relevant environment variables
-- ssh_sessions.json: Last 100 PegaProx SSH terminal sessions (connects, disconnects, failures)
+- ssh_sessions.json: Last 100 NosPanel SSH terminal sessions (connects, disconnects, failures)
 
 Privacy Note:
 Sensitive information (passwords, tokens, secrets, API keys) has been 
