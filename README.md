@@ -13,12 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="https://pegaprox.com">Website</a> •
-  <a href="https://docs.pegaprox.com">Documentation</a> •
-  <a href="https://github.com/PegaProx/project-pegaprox/releases">Releases</a> •
-  <a href="https://plugins.pegaprox.com/">Plugins</a> •
-  <a href="https://opencollective.com/pegaprox">Sponsoring</a> •
-  <a href="https://pegaprox.com/sponsors.html">Commercial Support</a>
+  <a href="https://github.com/ClicosimBardo/NOSpanel">GitHub</a> •
+  <a href="https://github.com/ClicosimBardo/NOSpanel/releases">Releases</a> •
+  <a href="https://github.com/ClicosimBardo/NOSpanel/issues">Issues</a>
 </p>
 
 <p align="center">
@@ -34,21 +31,19 @@
 </p>
 ---
 
-## 🚀 What is PegaProx?
+<!--
+  NosPanel is a fork based on the open-source PegaProx project
+  (https://github.com/PegaProx/project-pegaprox), licensed under AGPL-3.0.
+  The required "Powered by PegaProx" attribution is preserved - see NOTICE and the License section.
+-->
 
-PegaProx is a powerful web-based management interface for Proxmox VE and XCP-ng clusters. Manage multiple clusters from a single dashboard with features like live monitoring, VM management, automated tasks, and more.
+## 🚀 What is NosPanel?
 
-<p align="center">
-  <img src="https://pegaprox.com/pictures/pegaprox.png" alt="Dashboard Screenshot" width="800"/>
-</p>
-
-### 🪽 What's in the name?
-
-The name **PegaProx** is inspired by *Pegasus*, the winged horse of Greek mythology, combined with *Prox* as a reference to Proxmox VE. Pegasus symbolises speed, freedom and elegant flight — qualities we aspire to bring to multi-cluster hypervisor management.
+NosPanel is a powerful web-based management interface for Proxmox VE and XCP-ng clusters. Manage multiple clusters from a single dashboard with features like live monitoring, VM management, automated tasks, and more.
 
 ## ❤️ Sponsors
 
-> PegaProx is a community-driven open source project that **lives entirely from sponsorships and donations**. Server costs, domains, code-signing certificates and the developer hours behind every release come straight out of our own pockets — and out of the contributions of the wonderful companies and individuals below. If PegaProx saves you time at work, please consider [becoming a sponsor](mailto:sponsor@pegaprox.com) or chipping in on [Open Collective](https://opencollective.com/pegaprox). Every euro keeps the lights on. 💛
+> NosPanel is a community-driven open source project, forked from and based on the original [PegaProx](https://github.com/PegaProx/project-pegaprox) project. The tiers below are the sponsors of the original project; **NosPanel Sponsors** at the bottom of this section are the backers of this fork. 💛
 
 ### 💎 Platinum
 
@@ -107,12 +102,6 @@ The name **PegaProx** is inspired by *Pegasus*, the winged horse of Greek mythol
 
 <p align="center">
   <sub><b>Individual supporters:</b>&nbsp; Andreas Huemmer</sub>
-</p>
-
-<p align="center">
-  <a href="mailto:sponsor@pegaprox.com">Become a Sponsor</a> •
-  <a href="https://opencollective.com/pegaprox">Open Collective</a> •
-  <a href="https://pegaprox.com/sponsors.html">Commercial Support</a>
 </p>
 
 ### NosPanel Sponsors
@@ -228,36 +217,26 @@ The name **PegaProx** is inspired by *Pegasus*, the winged horse of Greek mythol
 ## ⚡ Quick Start / Installation
 
 ### Automated Installation
-This installation method pulls the deployment script directly from the current HEAD of the main branch. This means you will always receive the latest available version, including the most recent features and improvements. However, because it is not tied to a specific release, it may also contain unreleased changes or bugs that have not yet been fully tested. If you prefer a stable and tested version, consider installing PegaProx from a tagged release instead.
+This installation method pulls the deployment script directly from the current HEAD of the main branch. This means you will always receive the latest available version, including the most recent features and improvements. However, because it is not tied to a specific release, it may also contain unreleased changes or bugs that have not yet been fully tested. If you prefer a stable and tested version, consider installing NosPanel from a tagged release instead.
 
 ```bash
-curl -O https://raw.githubusercontent.com/PegaProx/project-pegaprox/refs/heads/main/deploy.sh
+curl -O https://raw.githubusercontent.com/ClicosimBardo/NOSpanel/refs/heads/main/deploy.sh
 chmod +x deploy.sh
 sudo ./deploy.sh
 ```
 
-### Debian Repository
-This installation method uses the official APT repository provided by gyptazy. The repository and its associated build and packaging pipeline are fully hosted and maintained by <a href="https://github.com/gyptazy">gyptazy</a>, where PegaProx releases are automatically built and published as Debian packages. Unlike the automated installation script, which pulls the latest code directly from the repository branch, the APT repository distributes packaged and versioned releases. This generally provides a more stable and predictable installation, making it the recommended approach for production environments.
-```bash
-curl https://git.gyptazy.com/api/packages/gyptazy/debian/repository.key -o /etc/apt/keyrings/gyptazy.asc
-echo "deb [signed-by=/etc/apt/keyrings/gyptazy.asc] https://packages.gyptazy.com/api/packages/gyptazy/debian trixie main" | sudo tee -a /etc/apt/sources.list.d/gyptazy.list
-apt-get update
-
-apt-get -y install pegaprox
-```
-
 ## Installation from Source
-This installation methods run PegaProx directly from the source code repository. It is primarily intended for development, testing, or advanced users who want full control over the codebase or want to modify and extend the project.
+This installation method runs NosPanel directly from the source code repository. It is primarily intended for development, testing, or advanced users who want full control over the codebase or want to modify and extend the project.
 
 By default, cloning the repository will pull the latest state of the main branch, which contains the most recent changes and features. While this ensures you always have the newest code available, it may also include in-progress changes that are not part of an official release yet.
 If you prefer a more stable version, you can optionally checkout a specific release tag from the repository before installing dependencies and starting the application. This allows you to run the exact code corresponding to an official release while still using the source-based installation method.
 
-Running PegaProx from source can be useful for debugging, contributing to the project, or integrating custom functionality, since you have direct access to the entire codebase and can easily update it using standard Git workflows.
+Running NosPanel from source can be useful for debugging, contributing to the project, or integrating custom functionality, since you have direct access to the entire codebase and can easily update it using standard Git workflows.
 
 ### Manual Installation
 ```bash
-git clone https://github.com/PegaProx/project-pegaprox.git
-cd project-pegaprox
+git clone https://github.com/ClicosimBardo/NOSpanel.git
+cd NOSpanel
 pip install -r requirements.txt
 python3 pegaprox_multi_cluster.py
 ```
@@ -267,33 +246,23 @@ python3 pegaprox_multi_cluster.py
 docker compose up -d
 ```
 
-Or without Compose:
-```bash
-docker run -d --name pegaprox \
-  -p 5000:5000 -p 5001:5001 -p 5002:5002 \
-  -v pegaprox-config:/app/config \
-  -v pegaprox-logs:/app/logs \
-  --restart unless-stopped \
-  ghcr.io/pegaprox/pegaprox:latest
-```
-
 For local builds:
 ```bash
-git clone https://github.com/PegaProx/project-pegaprox.git
-cd project-pegaprox
-docker build -t pegaprox .
-docker run -d --name pegaprox \
+git clone https://github.com/ClicosimBardo/NOSpanel.git
+cd NOSpanel
+docker build -t nospanel .
+docker run -d --name nospanel \
   -p 5000:5000 -p 5001:5001 -p 5002:5002 \
-  -v pegaprox-config:/app/config \
-  -v pegaprox-logs:/app/logs \
+  -v nospanel-config:/app/config \
+  -v nospanel-logs:/app/logs \
   --restart unless-stopped \
-  pegaprox
+  nospanel
 ```
 
 ### Debian Package (.deb build)
 ```bash
-git clone https://github.com/PegaProx/project-pegaprox.git
-cd project-pegaprox
+git clone https://github.com/ClicosimBardo/NOSpanel.git
+cd NOSpanel
 
 dpkg-buildpackage -us -uc
 sudo dpkg -i ../pegaprox_*.deb
@@ -304,7 +273,7 @@ sudo dpkg -i ../pegaprox_*.deb
 **Option 1: Update Script (Recommended)**
 ```bash
 cd /opt/PegaProx
-curl -O https://raw.githubusercontent.com/PegaProx/project-pegaprox/refs/heads/main/update.sh
+curl -O https://raw.githubusercontent.com/ClicosimBardo/NOSpanel/refs/heads/main/update.sh
 chmod +x update.sh
 sudo ./update.sh
 ```
@@ -315,7 +284,7 @@ Go to Settings → Updates and click "Check for Updates".
 
 ## 🔧 Configuration
 
-After starting PegaProx, open your browser and navigate to:
+After starting NosPanel, open your browser and navigate to:
 
 ```
 https://your-server-ip:5000
@@ -371,19 +340,19 @@ Password: admin
 
 ## 📖 Documentation
 
-Full documentation is available at **[docs.pegaprox.com](https://docs.pegaprox.com)**
+Full documentation is available in the **[docs](docs/)** folder of this repository.
 
 ## 📜 License
 
 This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
 
+**Acknowledgments:** NosPanel is a fork based on the original [PegaProx](https://github.com/PegaProx/project-pegaprox) project by the PegaProx Team and remains licensed under AGPL-3.0.
+
 **Attribution (AGPL §7b):** Under Section 7(b) of the AGPL, the **"Powered by PegaProx"** attribution shown in the client portal is a *required* author attribution and must be preserved in every copy and modified/derivative version — see the [NOTICE](NOTICE) file. Note also that AGPL §13 requires anyone hosting a **modified** version for network users to publish that version's complete source to those users. PegaProx is AGPL-3.0 only — the attribution applies to everyone, without exception.
 
 ## 💬 Support
 
-- 💬 Discord: [Community Server](https://discord.gg/AJPf3H62QW)
-- 📧 Email: support@pegaprox.com
-- 🐛 Issues: [GitHub Issues](https://github.com/PegaProx/project-pegaprox/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/ClicosimBardo/NOSpanel/issues)
 
 ## 🤖 Development Tools
 
@@ -393,10 +362,10 @@ AI-driven security auditing is an industry-standard practice — see [Hacker New
 
 ## ⭐ Star History
 
-If you find PegaProx useful, please consider giving it a star! ⭐
+If you find NosPanel useful, please consider giving it a star! ⭐
 
 ---
 
 <p align="center">
-  Made with ❤️ by the PegaProx Team
+  Made with ❤️ by the NosPanel team · based on PegaProx (AGPL-3.0)
 </p>
